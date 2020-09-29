@@ -135,6 +135,11 @@ public class Mutualchia {
             //System.out.println("importe "+ x.getImporte());
              //OrdenData od = new OrdenData(miconexion);
              //od.borrarOrden(29);
+             OrdenData od = new OrdenData(miconexion);
+            Orden x = od.buscarOrden(9);
+            System.out.println("importe "+ x.getImporte());
+            x.setImporte(200);
+            od.actualizarOrden(x);
             
             
             

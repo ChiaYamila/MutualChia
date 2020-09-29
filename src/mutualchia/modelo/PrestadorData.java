@@ -76,7 +76,10 @@ public class PrestadorData {
                 pre.setApellido(resultSet.getString("apellido"));
                 pre.setDni(resultSet.getLong("dni"));
                 pre.setActivo(resultSet.getBoolean("activo"));
-                //pre.setEspecialidad(resultSet.getInt("idEspecialidad"));
+                int idEspecialidad=resultSet.getInt("idEspecialidad");
+                EspecialidadData ed = new EspecialidadData (conexion);
+                Especialidad esp = ed.buscarEspecialidad(idEspecialidad);
+                pre.setEspecialidad(esp);
                 
                 //Agrego la nueva especialidad al arraylist
                 prestadores.add(pre);

@@ -118,8 +118,16 @@ public class OrdenData {
                 orden.setFecha(resultSet.getDate("fecha").toLocalDate());
                 orden.setFormaPago(resultSet.getString("formaPago"));
                 orden.setImporte(resultSet.getFloat("importe"));
-                //orden.setAfiliado(resultSet.getInt("idAfiliado"));
-                //orden.setHorario(resultSet.getInt("idHorario"));
+               //Buscar Afiliado
+                int idAfiliado = resultSet.getInt("idAfiliado");
+                AfiliadoData ad = new AfiliadoData (conexion);
+                Afiliado afi=ad.buscarAfiliado(idAfiliado);
+                orden.setAfiliado(afi);
+                //Buscar Horario
+                int idHorario =resultSet.getInt("idHorario");
+                HorarioData hd = new HorarioData (conexion);
+                Horario hor=hd.buscarHorario(idHorario);
+                orden.setHorario(hor);
                 orden.setActivo(resultSet.getBoolean("activo"));
             }      
             ps.close();                      
@@ -150,5 +158,31 @@ public class OrdenData {
         
     
     }
+     public void actualizarOrden(Orden orden){
+    
+        try {
+            
+            String sql = "UPDATE orden SET fecha = ?, formaPago = ? , "
+                    + "importe = ?, idAfiliado = ?,idHorario = ?, activo = ?  WHERE idOrden = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setDate(1, Date.valueOf(orden.getFecha()));
+            ps.setString(2, orden.getFormaPago());
+            ps.setFloat(3, orden.getImporte());
+            ps.setInt(4, orden.getAfiliado().getIdAfiliado());
+            ps.setInt(5, orden.getHorario().getIdHorario());
+            ps.setBoolean(6, orden.isActivo());
+            ps.setInt(7, orden.getIdOrden());
+            ps.executeUpdate();
+            
+          
+            ps.close();
+    
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar una orden: " + ex.getMessage());
+        }
+    
+    }
+
     
 }

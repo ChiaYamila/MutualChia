@@ -106,7 +106,10 @@ public class HorarioData {
                 horario.setIdHorario(resultSet.getInt("idHorario"));
                 horario.setDia(resultSet.getString("dia"));
                 horario.setHorarioAtencion(resultSet.getInt("horarioAtencion"));
-                //horario.setIdPrestador(resultSet.getInt("idPrestador"));
+                int IdPrestador = resultSet.getInt("idPrestador");
+                PrestadorData pd = new PrestadorData (conexion);
+                Prestador pre = pd.buscarPrestador(IdPrestador);
+                horario.setPrestador(pre);
                 horario.setActivo(resultSet.getBoolean("activo"));
                 
             }      
