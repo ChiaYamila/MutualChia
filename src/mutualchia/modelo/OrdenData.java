@@ -14,6 +14,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import mutualchia.Conexion;
+import mutualchia.entidades.Afiliado;
+import mutualchia.entidades.Horario;
 import mutualchia.entidades.Orden;
 
 /**
@@ -22,10 +24,12 @@ import mutualchia.entidades.Orden;
  */
 public class OrdenData {
     private Connection con;
+    private Conexion conexion;
     
     public OrdenData (Conexion conexion) {
         try {
             con = conexion.getConexion();
+            this.conexion=conexion;
         } catch (SQLException ex) {
             System.out.println("ERROR AL ABRIR AL OBTENER LA CONEXION");
         }
@@ -74,8 +78,16 @@ public class OrdenData {
                 ord.setFecha(resultSet.getDate("fecha").toLocalDate());
                 ord.setFormaPago(resultSet.getString("formaPago"));
                 ord.setImporte(resultSet.getFloat("importe"));
-                //ord.setAfiliado(resultSet.getInt("idAfiliado"));
-                //ord.setHorario(resultSet.getInt("idHorario"));
+                //Buscar Afiliado
+                int idAfiliado = resultSet.getInt("idAfiliado");
+                AfiliadoData ad = new AfiliadoData (conexion);
+                Afiliado afi=ad.buscarAfiliado(idAfiliado);
+                ord.setAfiliado(afi);
+                //Buscar Horario
+                int idHorario =resultSet.getInt("idHorario");
+                HorarioData hd = new HorarioData (conexion);
+                Horario hor=hd.buscarHorario(idHorario);
+                ord.setHorario(hor);
                 ord.setActivo(resultSet.getBoolean("activo"));
                 
                 

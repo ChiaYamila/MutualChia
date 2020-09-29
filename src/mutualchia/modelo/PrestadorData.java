@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import mutualchia.Conexion;
+import mutualchia.entidades.Especialidad;
 import mutualchia.entidades.Prestador;
 
 /**
@@ -21,10 +22,12 @@ import mutualchia.entidades.Prestador;
  */
 public class PrestadorData {
     private Connection con;
+    private Conexion conexion;
     
     public PrestadorData (Conexion conexion) {
         try {
             con = conexion.getConexion();
+            this.conexion=conexion;
         } catch (SQLException ex) {
             System.out.println("ERROR AL ABRIR AL OBTENER LA CONEXION");
         }
@@ -103,7 +106,12 @@ public class PrestadorData {
                 prestador.setApellido(resultSet.getString("apellido"));
                 prestador.setDni(resultSet.getLong("dni"));
                 prestador.setActivo(resultSet.getBoolean("activo"));
-                //prestador.setEspecialidad(resultSet.getInt("idEspecialidad"));
+                //Buscar Especialidad
+                int idEspecialidad=resultSet.getInt("idEspecialidad");
+                EspecialidadData ed = new EspecialidadData (conexion);
+                Especialidad esp = ed.buscarEspecialidad(idEspecialidad);
+                prestador.setEspecialidad(esp);
+                
             }      
             ps.close();                      
             

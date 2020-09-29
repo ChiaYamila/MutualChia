@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import mutualchia.Conexion;
 import mutualchia.entidades.Horario;
+import mutualchia.entidades.Prestador;
 
 /**
  *
@@ -21,10 +22,12 @@ import mutualchia.entidades.Horario;
  */
 public class HorarioData {
     private Connection con;
+    private Conexion conexion;
     
     public HorarioData (Conexion conexion) {
         try {
             con = conexion.getConexion();
+            this.conexion=conexion;
         } catch (SQLException ex) {
             System.out.println("ERROR AL ABRIR AL OBTENER LA CONEXION");
         }
@@ -56,7 +59,7 @@ public class HorarioData {
         }
     }
    public List<Horario> obtenerHorarios(){
-        List<Horario> Horarios = new ArrayList<Horario>();
+        List<Horario> horarios = new ArrayList<Horario>();
             
         try {
             String sql = "SELECT * FROM horario;";
@@ -71,10 +74,14 @@ public class HorarioData {
                 hor.setDia(resultSet.getString("dia"));
                 hor.setHorarioAtencion(resultSet.getInt("horarioAtencion"));
                 hor.setActivo(resultSet.getBoolean("activo"));
-                //hor.setIdPrestador(resultSet.getInt("idPrestador"));
+                //Buscar Horario
+                int IdPrestador = resultSet.getInt("idPrestador");
+                PrestadorData pd = new PrestadorData (conexion);
+                Prestador pre = pd.buscarPrestador(IdPrestador);
+                hor.setPrestador(pre);
                 
                 //Agrego la nueva especialidad al arraylist
-                //horarios.add(hor);
+                horarios.add(hor);
             }      
             ps.close();
         } catch (SQLException ex) {
@@ -82,7 +89,7 @@ public class HorarioData {
         }
         
         
-        return Horarios;
+        return horarios;
     }
   public Horario buscarHorario(int id){
     Horario horario=null;
