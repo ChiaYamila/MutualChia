@@ -144,6 +144,29 @@ public class PrestadorData {
         
     
     }
+     public void actualizarPrestador(Prestador prestador){
+    
+        try {
+            
+            String sql = "UPDATE prestador SET nombre = ?, apellido = ? , "
+                    + "dni = ?, activo = ?,idEspecialidad = ?,  WHERE idPrestador = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, prestador.getNombre());
+            ps.setString(2, prestador.getApellido());
+            ps.setLong(3, prestador.getDni());
+            ps.setBoolean(4, prestador.isActivo());
+            ps.setInt(5, prestador.getEspecialidad().getIdEspecialidad());
+            ps.setInt(6, prestador.getIdPrestador());
+            ps.executeUpdate();
+            
+          
+            ps.close();
+    
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar un prestador: " + ex.getMessage());
+        }
+     }
 }
 
     

@@ -130,4 +130,24 @@ public class EspecialidadData {
 
 
     }
+    public void actualizarEspecialidad(Especialidad especialidad){
+    
+        try {
+            
+            String sql = "UPDATE especialidad SET especialidad = ?, "
+                    + "activo = ?  WHERE idEspecialidad = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, especialidad.getEspecialidad());
+            ps.setBoolean(3, especialidad.isActivo());
+            ps.setInt(4, especialidad.getIdEspecialidad());
+            ps.executeUpdate();
+            
+          
+            ps.close();
+    
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar una especialidad: " + ex.getMessage());
+        }
+     }
 }

@@ -129,6 +129,27 @@ public class AfiliadoData {
         
     
     }
+    public void actualizarAfiliado(Afiliado afiliado){
+    
+        try {
+            
+            String sql = "UPDATE afiliado SET nombre = ?, apellido = ? , "
+                    + "dni = ?, activo = ?  WHERE idAfiliado = ?;";
 
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, afiliado.getNombre());
+            ps.setString(2, afiliado.getApellido());
+            ps.setLong(3, afiliado.getDni());
+            ps.setBoolean(4, afiliado.isActivo());
+            ps.setInt(5, afiliado.getIdAfiliado());
+            ps.executeUpdate();
+            
+          
+            ps.close();
+    
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar un afiliado: " + ex.getMessage());
+        }
+     }
         }
     

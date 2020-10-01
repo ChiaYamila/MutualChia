@@ -141,5 +141,27 @@ public class HorarioData {
         
     
     }
+      public void actualizarHorario(Horario horario){
+    
+        try {
+            
+            String sql = "UPDATE horario SET dia = ?, horarioAtencion = ? , "
+                    + "activo = ?, idPrestador = ?,  WHERE idHorario = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, horario.getDia());
+            ps.setInt(2, horario.getHorarioAtencion());
+            ps.setBoolean(3, horario.isActivo());
+            ps.setInt(4, horario.getPrestador().getIdPrestador());
+            ps.setInt(5, horario.getIdHorario());
+            ps.executeUpdate();
+            
+          
+            ps.close();
+    
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar un horario: " + ex.getMessage());
+        }
+     }
     
 }

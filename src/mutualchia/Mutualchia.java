@@ -135,11 +135,51 @@ public class Mutualchia {
             //System.out.println("importe "+ x.getImporte());
              //OrdenData od = new OrdenData(miconexion);
              //od.borrarOrden(29);
-             OrdenData od = new OrdenData(miconexion);
-            Orden x = od.buscarOrden(9);
-            System.out.println("importe "+ x.getImporte());
-            x.setImporte(200);
-            od.actualizarOrden(x);
+            // OrdenData od = new OrdenData(miconexion);
+            //Orden x = od.buscarOrden(9);
+            //System.out.println("importe "+ x.getImporte());
+            //x.setImporte(200);
+            //od.actualizarOrden(x);
+            //NO FUNCIONO!!! PrestadorData pd = new PrestadorData(miconexion);
+            //Prestador x = pd.buscarPrestador(3);
+            //System.out.println ("Nombre Prestador: "+ x.getNombre());
+            //System.out.println ("Apellido Prestador: "+ x.getApellido());
+            //System.out.println ("Dni Prestador: "+ x.getDni());
+            //System.out.println ("Activo Prestador: "+ x.isActivo());
+            //x.setNombre(Nieves);
+            //x.setApellido(Chia);
+            //x.setDni(37638710);
+            //x.setActivo(true);
+            //pd.actualizarPrestador(x);
+            //NO FUNCIONO!!! AfiliadoData ad = new AfiliadoData(miconexion);
+            //Afiliado x = ad.buscarAfiliado(5);
+            //System.out.println ("Nombre Afiliado: "+ x.getNombre());
+            //System.out.println ("Apellido Afiliado: "+ x.getApellido());
+            //System.out.println ("Dni AFiliado: "+ x.getDni());
+            //System.out.println ("Activo Afiliado: "+ x.isActivo());
+            //x.setNombre(Luis);
+            //x.setApellido(Sosa);
+            //x.setDni(37638710);
+            //x.setActivo(false);
+            //ad.actualizarAfiliado(x);
+            //NO FUNCIONO!!! EspecialidadData ed = new EspecialidadData(miconexion);
+            //Especialidad x = ed.buscarEspecialidad(1);
+            //System.out.println ("id: "+ x.getIdEspecialidad());
+            //System.out.println ("Nombre Especialidad "+ x.getEspecialidad());
+            //x.setIdEspecialidad(1);
+            //x.setEspecialidad(Neurologo);
+            //ed.actualizarEspecialidad(x);
+            HorarioData hd = new HorarioData(miconexion);
+            Horario x = hd.buscarHorario(1);
+            System.out.println ("id: "+ x.getIdHorario());
+            System.out.println ("Dia Atencion: "+ x.getDia());
+            System.out.println ("Horario Atencion: "+ x.getHorarioAtencion());
+            
+            
+            
+            
+            
+            
             
             
             
