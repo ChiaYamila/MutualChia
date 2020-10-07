@@ -149,7 +149,7 @@ public class PrestadorData {
         try {
             
             String sql = "UPDATE prestador SET nombre = ?, apellido = ? , "
-                    + "dni = ?, activo = ?,idEspecialidad = ?,  WHERE idPrestador = ?;";
+                    + "dni = ?, activo = ?,idEspecialidad = ?  WHERE idPrestador = ?;";
 
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, prestador.getNombre());

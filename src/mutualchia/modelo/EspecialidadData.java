@@ -139,8 +139,8 @@ public class EspecialidadData {
 
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, especialidad.getEspecialidad());
-            ps.setBoolean(3, especialidad.isActivo());
-            ps.setInt(4, especialidad.getIdEspecialidad());
+            ps.setBoolean(2, especialidad.isActivo());
+            ps.setInt(3, especialidad.getIdEspecialidad());
             ps.executeUpdate();
             
           

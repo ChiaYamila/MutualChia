@@ -146,7 +146,7 @@ public class HorarioData {
         try {
             
             String sql = "UPDATE horario SET dia = ?, horarioAtencion = ? , "
-                    + "activo = ?, idPrestador = ?,  WHERE idHorario = ?;";
+                    + "activo = ?, idPrestador = ?  WHERE idHorario = ?;";
 
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, horario.getDia());
