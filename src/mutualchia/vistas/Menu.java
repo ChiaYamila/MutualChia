@@ -129,6 +129,12 @@ public class Menu extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
+        escritorio.removeAll();
+        escritorio.repaint();
+        EspecialidadVista ev = new EspecialidadVista ();
+        ev.setVisible(true);
+        escritorio.add(ev);
+        escritorio.moveToFront(ev);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
