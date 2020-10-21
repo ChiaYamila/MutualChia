@@ -6,6 +6,7 @@
 package mutualchia.vistas;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -20,14 +21,27 @@ import mutualchia.modelo.EspecialidadData;
  */
 public class EspecialidadVista extends javax.swing.JInternalFrame {
     private DefaultTableModel modelo;
+    private EspecialidadData ed;
+    private List<Especialidad> listaEspecialidades;
+    private Especialidad esp;
+
+    
 
     /**
      * Creates new form EspecialidadVista
      */
     public EspecialidadVista() {
-        initComponents();
-        modelo= new DefaultTableModel ();
-        armarCabecera();
+        try {
+            initComponents();
+            modelo= new DefaultTableModel ();
+            armarCabecera();
+            ed = new EspecialidadData (new Conexion());
+            cargarDatos();
+          
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Error de Conexion");
+        }
     }
 
     /**
@@ -49,6 +63,7 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
         btNuevo = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tEspecialidades = new javax.swing.JTable();
+        btModificar = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Sylfaen", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 51));
@@ -69,6 +84,11 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
 
         btSalir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btSalir.setText("Salir");
+        btSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSalirActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Activo");
 
@@ -98,32 +118,42 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tEspecialidades.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tEspecialidadesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tEspecialidades);
+
+        btModificar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btModificar.setText("Modificar");
+        btModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btModificarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(chbActivo))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(38, 38, 38))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(btNuevo)))
+                            .addComponent(btNuevo)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(chbActivo))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(38, 38, 38)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -132,7 +162,9 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btGuardar)
-                        .addGap(171, 171, 171)
+                        .addGap(48, 48, 48)
+                        .addComponent(btModificar)
+                        .addGap(50, 50, 50)
                         .addComponent(btSalir)
                         .addGap(52, 52, 52))))
         );
@@ -157,7 +189,8 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btSalir)
                             .addComponent(btGuardar)
-                            .addComponent(btNuevo))))
+                            .addComponent(btNuevo)
+                            .addComponent(btModificar))))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -175,30 +208,61 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
         btGuardar.setEnabled(true);
         tfNombre.setEditable(true);
         chbActivo.setEnabled(true);
+        
     }//GEN-LAST:event_btNuevoActionPerformed
 
     private void btGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarActionPerformed
-        try {
+        
             // TODO add your handling code here:
-            Especialidad esp = new Especialidad();
+            
+            if (esp==null){
+            esp = new Especialidad();
             esp.setEspecialidad(tfNombre.getText());
             esp.setActivo(chbActivo.isSelected());
-            
-            Conexion miconexion = new Conexion();
-            EspecialidadData ed = new EspecialidadData(miconexion);
+            System.out.println (esp.getEspecialidad());
+            System.out.println (esp.isActivo());
+           
             ed.agregarEspecialidad(esp);
-            
+            } else {
+                esp.setEspecialidad(tfNombre.getText());
+                esp.setActivo(chbActivo.isSelected());
+                ed.actualizarEspecialidad(esp);
+            }
              
             
-        } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(this, "Error al Cargar Especialidad");
-        }
+  
         tfNombre.setText("");
         chbActivo.setSelected(false);
         tfNombre.setEditable(false);
         chbActivo.setEnabled(false);
         btGuardar.setEnabled(false);
+        cargarDatos ();
+        esp=null;
     }//GEN-LAST:event_btGuardarActionPerformed
+
+    private void tEspecialidadesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tEspecialidadesMouseClicked
+        // TODO add your handling code here:
+        int fila = tEspecialidades.getSelectedRow();
+        tfNombre.setText((String) tEspecialidades.getValueAt(fila, 1));
+        chbActivo.setSelected((boolean) tEspecialidades.getValueAt(fila, 2));
+        esp = new Especialidad ();
+        esp.setIdEspecialidad((int) tEspecialidades.getValueAt(fila, 0));
+        esp.setEspecialidad((String) tEspecialidades.getValueAt(fila, 1));
+        esp.setActivo((boolean) tEspecialidades.getValueAt(fila, 2));
+    }//GEN-LAST:event_tEspecialidadesMouseClicked
+
+    private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
+        // TODO add your handling code here:
+        tfNombre.setEditable(true);
+        chbActivo.setEnabled(true);
+        btGuardar.setEnabled(true);
+        btModificar.setEnabled(true);
+    }//GEN-LAST:event_btModificarActionPerformed
+
+    private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btSalirActionPerformed
         private void armarCabecera () {
             ArrayList<Object> titulos=new ArrayList<Object>();
             titulos.add("ID");
@@ -208,10 +272,32 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
                 modelo.addColumn(it);
             }
             tEspecialidades.setModel(modelo);
+            
+        }
+        
+        private void cargarDatos () {
+            borrarFilas ();
+           listaEspecialidades = ed.obtenerEspecialidades();
+           for(Especialidad e:listaEspecialidades){
+        
+            modelo.addRow(new Object[]{e.getIdEspecialidad(),e.getEspecialidad(),e.isActivo()});
+
+        }
+          
+        }
+        private void borrarFilas (){
+            int a =modelo.getRowCount()-1;
+            for(int i=a;i>=0;i--){
+
+                modelo.removeRow(i );
+                
+
+        }
         }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGuardar;
+    private javax.swing.JButton btModificar;
     private javax.swing.JButton btNuevo;
     private javax.swing.JButton btSalir;
     private javax.swing.JCheckBox chbActivo;

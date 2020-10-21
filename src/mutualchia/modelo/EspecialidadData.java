@@ -34,7 +34,7 @@ public class EspecialidadData {
        
         try {
             
-            String sql = "INSERT INTO especialidad (especialidad) VALUES ( ?, ? );";
+            String sql = "INSERT INTO especialidad (especialidad, activo) VALUES ( ?, ? );";
 
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         
@@ -142,6 +142,7 @@ public class EspecialidadData {
             ps.setBoolean(2, especialidad.isActivo());
             ps.setInt(3, especialidad.getIdEspecialidad());
             ps.executeUpdate();
+            System.out.println(especialidad.getIdEspecialidad());
             
           
             ps.close();

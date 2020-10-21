@@ -176,20 +176,8 @@ public class Mutualchia {
             //x.setDia("miercoles");
             //hd.actualizarHorario(x);
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-
             // TODO code application logic here
-        } catch (ClassNotFoundException ex) {
+   } catch (ClassNotFoundException ex) {
             System.out.println("ERROR AL CARGAR DRIVER");
         
         }
