@@ -34,7 +34,7 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
             modelo= new DefaultTableModel ();
             armarCabecera();
             ad = new AfiliadoData (new Conexion());
-            cargarDatos();
+            cargarDatos(-1);
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Error de Conexion");
       
@@ -53,7 +53,7 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         tfDnii = new javax.swing.JTextField();
-        btAnular = new javax.swing.JButton();
+        btNuevo = new javax.swing.JButton();
         btGuardar = new javax.swing.JButton();
         btBorrar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -72,6 +72,7 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
         tfApellido = new javax.swing.JTextField();
         tfDni = new javax.swing.JTextField();
         btModificar = new javax.swing.JButton();
+        btSalir = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Sylfaen", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 51));
@@ -79,11 +80,17 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Ingrese un DNI");
 
-        btAnular.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btAnular.setText("Anular");
+        btNuevo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btNuevo.setText("Nuevo");
+        btNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btNuevoActionPerformed(evt);
+            }
+        });
 
         btGuardar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btGuardar.setText("Guardar");
+        btGuardar.setEnabled(false);
         btGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btGuardarActionPerformed(evt);
@@ -92,6 +99,11 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
 
         btBorrar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btBorrar.setText("Borrar");
+        btBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btBorrarActionPerformed(evt);
+            }
+        });
 
         tbAfiliados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -104,6 +116,11 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
                 "Nombre", "Apellido", "DNI", "Activo"
             }
         ));
+        tbAfiliados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbAfiliadosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbAfiliados);
 
         btBuscar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -127,14 +144,33 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
 
         jLabel8.setText("Activo");
 
+        chbActivo.setEnabled(false);
+
         btLimpiar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btLimpiar.setText("Limpiar");
 
+        tfId.setEditable(false);
+
+        tfNombre.setEditable(false);
+
+        tfApellido.setEditable(false);
+
+        tfDni.setEditable(false);
+
         btModificar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btModificar.setText("Modificar");
+        btModificar.setEnabled(false);
         btModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btModificarActionPerformed(evt);
+            }
+        });
+
+        btSalir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btSalir.setText("Salir");
+        btSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSalirActionPerformed(evt);
             }
         });
 
@@ -188,15 +224,17 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
                         .addComponent(btLimpiar)
                         .addGap(19, 19, 19))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btAnular)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btNuevo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btGuardar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btModificar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btBorrar)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btSalir)
+                .addGap(6, 6, 6))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,14 +260,10 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel6)
                                     .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel7))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(tfDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tfDni, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(39, 39, 39))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -243,10 +277,11 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
                             .addComponent(chbActivo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btAnular)
+                    .addComponent(btNuevo)
                     .addComponent(btGuardar)
                     .addComponent(btModificar)
-                    .addComponent(btBorrar))
+                    .addComponent(btBorrar)
+                    .addComponent(btSalir))
                 .addGap(78, 78, 78))
         );
 
@@ -259,48 +294,113 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
             afi = new Afiliado();
             afi.setNombre(tfNombre.getText());
             afi.setApellido(tfApellido.getText());
-            afi.setDni(tfDni.getText(Long.parseLong(tfDni.getText())));
+            afi.setDni((Long.parseLong(tfDni.getText())));
             afi.setActivo(chbActivo.isSelected());
             System.out.println (afi.getNombre());
             System.out.println (afi.isActivo());
            
             ad.agregarAfiliado(afi);
             } else {
+            afi.setIdAfiliado(Integer.parseInt(tfId.getText()));
                 afi.setNombre(tfNombre.getText());
                 afi.setApellido(tfApellido.getText());
-                afi.getDni(tfDni.getLong());
+                afi.setDni((Long.parseLong(tfDni.getText())));
                 afi.setActivo(chbActivo.isSelected());
                 ad.actualizarAfiliado(afi);
+                
             }
              
             
   
         tfDnii.setText("");
-        btBuscar.setEnabled(false);
+        
         tfId.setEditable(false);
         tfNombre.setEditable(false);
         tfApellido.setEditable(false);
         chbActivo.setEnabled(false);
         btGuardar.setEnabled(false);
-        cargarDatos ();
+        cargarDatos (-1);
         afi=null;
     }//GEN-LAST:event_btGuardarActionPerformed
 
     private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
         // TODO add your handling code here:
-        tfDnii.setEditable(true);
+        tfDni.setEditable(true);
+        tfNombre.setEditable(true);
+        tfApellido.setEditable(true);
         chbActivo.setEnabled(true);
         btGuardar.setEnabled(true);
-        btModificar.setEnabled(true);
+        btModificar.setEnabled(false);
     }//GEN-LAST:event_btModificarActionPerformed
 
     private void btBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarActionPerformed
         // TODO add your handling code here:
+        try {
+        long dniBuscar =Long.parseLong(tfDnii.getText());
+        cargarDatos(dniBuscar);
+        }catch(Exception e){
+        JOptionPane.showMessageDialog(this, "Usted debe introducir un numero");
+        tfDnii.requestFocus();
+        cargarDatos(-1);
+        }
     }//GEN-LAST:event_btBuscarActionPerformed
 
+    private void tbAfiliadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbAfiliadosMouseClicked
+        // TODO add your handling code here:
+        int fila = tbAfiliados.getSelectedRow();
+        
+        tfId.setText((int)tbAfiliados.getValueAt(fila, 0)+"");
+        tfNombre.setText((String)tbAfiliados.getValueAt(fila, 1));
+        tfApellido.setText((String)tbAfiliados.getValueAt(fila, 2));
+        tfDni.setText((long)tbAfiliados.getValueAt(fila, 3)+"");
+        chbActivo.setSelected((boolean)tbAfiliados.getValueAt(fila, 4));
+        
+        afi = new Afiliado ();
+        afi.setIdAfiliado((int)tbAfiliados.getValueAt(fila, 0));
+        afi.setNombre((String)tbAfiliados.getValueAt(fila, 1));
+        afi.setApellido((String)tbAfiliados.getValueAt(fila, 2));
+        afi.setDni((long)tbAfiliados.getValueAt(fila, 3));
+        chbActivo.setSelected((boolean)tbAfiliados.getValueAt(fila, 4));
+        btModificar.setEnabled(true);
+        
+    }//GEN-LAST:event_tbAfiliadosMouseClicked
+
+    private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btSalirActionPerformed
+
+    private void btNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNuevoActionPerformed
+        // TODO add your handling code here: 
+        limpiar();
+        btGuardar.setEnabled(true);
+        tfDni.setEditable(true);
+        tfNombre.setEditable(true);
+        tfApellido.setEditable(true);
+        chbActivo.setEnabled(true);
+        afi=null;
+        
+        
+    }//GEN-LAST:event_btNuevoActionPerformed
+
+    private void btBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBorrarActionPerformed
+        // TODO add your handling code here:
+        int idAfiliadoABorrar= Integer.parseInt(tfId.getText());
+        ad.borrarAfiliado(idAfiliadoABorrar);
+        cargarDatos(-1);
+        
+    }//GEN-LAST:event_btBorrarActionPerformed
+
+    public void limpiar() {
+    tfId.setText("");
+    tfNombre.setText("");
+    tfApellido.setText("");
+    tfDni.setText("");
+    chbActivo.setSelected(false);
+            }
     private void armarCabecera () {
             ArrayList<Object> titulos=new ArrayList<Object>();
-            
+            titulos.add("ID");
             titulos.add("Nombre");
             
             titulos.add("Apellido");
@@ -313,16 +413,22 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
             
         }
         
-        private void cargarDatos () {
+        private void cargarDatos (long dni) {
             borrarFilas ();
            listaAfiliados = ad.obtenerAfiliados();
-           for(Afiliado a:listaAfiliados){
+           for(Afiliado a:listaAfiliados) {
+               if(dni==-1){
+            modelo.addRow(new Object[]{a.getIdAfiliado(),a.getNombre(),a.getApellido(),a.getDni(),a.isActivo()});
+               }else{
+                if(dni==a.getDni()) {
+                modelo.addRow(new Object[]{a.getIdAfiliado(),a.getNombre(),a.getApellido(),a.getDni(),a.isActivo()});
+                
+                }
+                       }
         
-            modelo.addRow(new Object[]{a.getNombre(),a.getApellido(),a.getDni(),a.isActivo()});
-
         }
-          
         }
+        
         private void borrarFilas (){
             int a =modelo.getRowCount()-1;
             for(int i=a;i>=0;i--){
@@ -334,12 +440,13 @@ public class AfiliadoVista extends javax.swing.JInternalFrame {
         }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btAnular;
     private javax.swing.JButton btBorrar;
     private javax.swing.JButton btBuscar;
     private javax.swing.JButton btGuardar;
     private javax.swing.JButton btLimpiar;
     private javax.swing.JButton btModificar;
+    private javax.swing.JButton btNuevo;
+    private javax.swing.JButton btSalir;
     private javax.swing.JCheckBox chbActivo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

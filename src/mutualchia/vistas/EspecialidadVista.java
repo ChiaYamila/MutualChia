@@ -127,6 +127,7 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
 
         btModificar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btModificar.setText("Modificar");
+        btModificar.setEnabled(false);
         btModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btModificarActionPerformed(evt);
@@ -206,6 +207,7 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
         tfNombre.setText("");
         chbActivo.setSelected(false);
         btGuardar.setEnabled(true);
+        btModificar.setEnabled(false);
         tfNombre.setEditable(true);
         chbActivo.setEnabled(true);
         
@@ -227,6 +229,7 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
                 esp.setEspecialidad(tfNombre.getText());
                 esp.setActivo(chbActivo.isSelected());
                 ed.actualizarEspecialidad(esp);
+                
             }
              
             
@@ -236,6 +239,7 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
         tfNombre.setEditable(false);
         chbActivo.setEnabled(false);
         btGuardar.setEnabled(false);
+        
         cargarDatos ();
         esp=null;
     }//GEN-LAST:event_btGuardarActionPerformed
@@ -249,6 +253,7 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
         esp.setIdEspecialidad((int) tEspecialidades.getValueAt(fila, 0));
         esp.setEspecialidad((String) tEspecialidades.getValueAt(fila, 1));
         esp.setActivo((boolean) tEspecialidades.getValueAt(fila, 2));
+        btModificar.setEnabled(true);
     }//GEN-LAST:event_tEspecialidadesMouseClicked
 
     private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
@@ -256,7 +261,9 @@ public class EspecialidadVista extends javax.swing.JInternalFrame {
         tfNombre.setEditable(true);
         chbActivo.setEnabled(true);
         btGuardar.setEnabled(true);
-        btModificar.setEnabled(true);
+        btModificar.setEnabled(false);
+        btNuevo.setEnabled(false);
+          
     }//GEN-LAST:event_btModificarActionPerformed
 
     private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed
