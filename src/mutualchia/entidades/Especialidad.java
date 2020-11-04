@@ -54,5 +54,22 @@ public class Especialidad {
     public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
     }
+
+    @Override
+    public String toString() {
+        return especialidad;//To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Especialidad && obj !=null){
+   Especialidad es=(Especialidad)obj;
+   if (es.getEspecialidad().equals(especialidad)){
+                        return true;
+   }
+}
+return false;
+
+    }
     
 }

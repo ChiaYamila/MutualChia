@@ -216,17 +216,14 @@
     <Component class="javax.swing.JComboBox" name="cbEspecialidadd">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="5">
-            <StringItem index="0" value="Cirujano"/>
-            <StringItem index="1" value="Pediatra"/>
-            <StringItem index="2" value="Dentista"/>
-            <StringItem index="3" value="Neurologo"/>
-            <StringItem index="4" value="Oculista"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbEspecialidaddActionPerformed"/>
+      </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Especialidad&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JCheckBox" name="chbActivos">
@@ -311,17 +308,11 @@
     <Component class="javax.swing.JComboBox" name="cbEspecialidad">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="5">
-            <StringItem index="0" value="Cirujano"/>
-            <StringItem index="1" value="Pediatra"/>
-            <StringItem index="2" value="Dentista"/>
-            <StringItem index="3" value="Neurologo"/>
-            <StringItem index="4" value="Oculista"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Especialidad&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JTextField" name="tfDni">

@@ -10,7 +10,9 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mutualchia.Conexion;
+import mutualchia.entidades.Especialidad;
 import mutualchia.entidades.Prestador;
+import mutualchia.modelo.EspecialidadData;
 import mutualchia.modelo.PrestadorData;
 
 /**
@@ -22,6 +24,7 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
     private PrestadorData pd;
     private List<Prestador> listaPrestadores;
     private Prestador pre;
+    private EspecialidadData ed;
 
     /**
      * Creates new form PrestadorVista
@@ -32,7 +35,10 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
             modelo= new DefaultTableModel ();
             armarCabecera();
             pd = new PrestadorData (new Conexion());
+            
             cargarDatos(-1);
+            ed = new EspecialidadData (new Conexion());
+            traerEspecialidades();
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Error de Conexion");
       
@@ -103,7 +109,11 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
             }
         });
 
-        cbEspecialidadd.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cirujano", "Pediatra", "Dentista", "Neurologo", "Oculista" }));
+        cbEspecialidadd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbEspecialidaddActionPerformed(evt);
+            }
+        });
 
         chbActivos.setText("Solo activos");
 
@@ -144,8 +154,6 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
 
         btLimpiar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btLimpiar.setText("Limpiar");
-
-        cbEspecialidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cirujano", "Pediatra", "Dentista", "Neurologo", "Oculista" }));
 
         tfDni.setEditable(false);
 
@@ -322,7 +330,7 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
              
             
   
-        cbEspecialidadd.setList
+       
         
         tfId.setEditable(false);
         tfNombre.setEditable(false);
@@ -351,14 +359,16 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
         tfNombre.setText((String)tbPrestadores.getValueAt(fila, 1));
         tfApellido.setText((String)tbPrestadores.getValueAt(fila, 2));
         tfDni.setText((long)tbPrestadores.getValueAt(fila, 3)+"");
-        chbActivo.setSelected((boolean)tbPrestadores.getValueAt(fila, 4));
+        cbEspecialidad.setSelectedItem((Especialidad)tbPrestadores.getValueAt(fila, 4));
+        chbActivo.setSelected((boolean)tbPrestadores.getValueAt(fila, 5));
         
         pre = new Prestador ();
         pre.setIdPrestador((int)tbPrestadores.getValueAt(fila, 0));
         pre.setNombre((String)tbPrestadores.getValueAt(fila, 1));
         pre.setApellido((String)tbPrestadores.getValueAt(fila, 2));
         pre.setDni((long)tbPrestadores.getValueAt(fila, 3));
-        chbActivo.setSelected((boolean)tbPrestadores.getValueAt(fila, 4));
+        pre.setEspecialidad(((Especialidad)tbPrestadores.getValueAt(fila, 4)));
+        chbActivo.setSelected((boolean)tbPrestadores.getValueAt(fila, 5));
         btModificar.setEnabled(true);
     }//GEN-LAST:event_tbPrestadoresMouseClicked
 
@@ -379,7 +389,20 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
         pd.borrarPrestador(idPrestadorABorrar);
         cargarDatos(-1);
     }//GEN-LAST:event_btBorrarActionPerformed
+
+    private void cbEspecialidaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEspecialidaddActionPerformed
+        // TODO add your handling code here:try {
+       
+        
+    }//GEN-LAST:event_cbEspecialidaddActionPerformed
  
+    public void traerEspecialidades () {
+    List <Especialidad> lista = ed.obtenerEspecialidades();
+    for (Especialidad a:lista) {
+    cbEspecialidad.addItem(a);
+    cbEspecialidadd.addItem(a);
+    }
+    }
     public void limpiar() {
     tfId.setText("");
     tfNombre.setText("");
@@ -391,9 +414,9 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
             ArrayList<Object> titulos=new ArrayList<Object>();
             titulos.add("ID");
             titulos.add("Nombre");
-            
             titulos.add("Apellido");
             titulos.add("Dni");
+            titulos.add("Especialidad");
             titulos.add("Activo");
             for(Object it:titulos) {
                 modelo.addColumn(it);
@@ -407,10 +430,10 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
            listaPrestadores = pd.obtenerPrestadores();
            for(Prestador a:listaPrestadores) {
                if(dni==-1){
-            modelo.addRow(new Object[]{a.getIdPrestador(),a.getNombre(),a.getApellido(),a.getDni(),a.isActivo()});
+            modelo.addRow(new Object[]{a.getIdPrestador(),a.getNombre(),a.getApellido(),a.getDni(),a.getEspecialidad(),a.isActivo()});
                }else{
                 if(dni==a.getDni()) {
-                modelo.addRow(new Object[]{a.getIdPrestador(),a.getNombre(),a.getApellido(),a.getDni(),a.isActivo()});
+                modelo.addRow(new Object[]{a.getIdPrestador(),a.getNombre(),a.getApellido(),a.getDni(),a.getEspecialidad(),a.isActivo()});
                 
                 }
                        }
@@ -435,8 +458,8 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
     private javax.swing.JButton btModificar;
     private javax.swing.JButton btNuevo;
     private javax.swing.JButton btSalir;
-    private javax.swing.JComboBox<String> cbEspecialidad;
-    private javax.swing.JComboBox<String> cbEspecialidadd;
+    private javax.swing.JComboBox<Especialidad> cbEspecialidad;
+    private javax.swing.JComboBox<Especialidad> cbEspecialidadd;
     private javax.swing.JCheckBox chbActivo;
     private javax.swing.JCheckBox chbActivos;
     private javax.swing.JLabel jLabel1;
