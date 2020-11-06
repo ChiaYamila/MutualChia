@@ -24,6 +24,7 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
     private PrestadorData pd;
     private List<Prestador> listaPrestadores;
     private Prestador pre;
+    private Especialidad esp;
     private EspecialidadData ed;
 
     /**
@@ -36,9 +37,10 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
             armarCabecera();
             pd = new PrestadorData (new Conexion());
             
-            cargarDatos(-1);
+            cargarDatos();
             ed = new EspecialidadData (new Conexion());
             traerEspecialidades();
+            cbEspecialidadd.setSelectedIndex(1);
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Error de Conexion");
       
@@ -337,7 +339,7 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
         tfApellido.setEditable(false);
         chbActivo.setEnabled(false);
         btGuardar.setEnabled(false);
-        cargarDatos (-1);
+        cargarDatos ();
         pre=null;
     }//GEN-LAST:event_btGuardarActionPerformed
 
@@ -387,20 +389,22 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
          int idPrestadorABorrar= Integer.parseInt(tfId.getText());
         pd.borrarPrestador(idPrestadorABorrar);
-        cargarDatos(-1);
+        cargarDatos();
     }//GEN-LAST:event_btBorrarActionPerformed
 
     private void cbEspecialidaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEspecialidaddActionPerformed
         // TODO add your handling code here:try {
+        cargarDatos();
+        
        
         
     }//GEN-LAST:event_cbEspecialidaddActionPerformed
  
     public void traerEspecialidades () {
     List <Especialidad> lista = ed.obtenerEspecialidades();
-    for (Especialidad a:lista) {
-    cbEspecialidad.addItem(a);
-    cbEspecialidadd.addItem(a);
+    for (Especialidad e:lista) {
+    cbEspecialidad.addItem(e);
+    cbEspecialidadd.addItem(e);
     }
     }
     public void limpiar() {
@@ -425,21 +429,19 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
             
         }
         
-        private void cargarDatos (long dni) {
+        private void cargarDatos () {
             borrarFilas ();
+            Especialidad e = (Especialidad)cbEspecialidadd.getSelectedItem();
            listaPrestadores = pd.obtenerPrestadores();
-           for(Prestador a:listaPrestadores) {
-               if(dni==-1){
-            modelo.addRow(new Object[]{a.getIdPrestador(),a.getNombre(),a.getApellido(),a.getDni(),a.getEspecialidad(),a.isActivo()});
-               }else{
-                if(dni==a.getDni()) {
-                modelo.addRow(new Object[]{a.getIdPrestador(),a.getNombre(),a.getApellido(),a.getDni(),a.getEspecialidad(),a.isActivo()});
-                
+           for(Prestador p:listaPrestadores) {
+               if(p.getEspecialidad().getIdEspecialidad() == e.getIdEspecialidad()) {
+            modelo.addRow(new Object[]{p.getIdPrestador(),p.getNombre(),p.getApellido(),p.getDni(),p.getEspecialidad(),p.isActivo()});
+               }
                 }
                        }
         
-        }
-        }
+        
+        
         
         private void borrarFilas (){
             int a =modelo.getRowCount()-1;
