@@ -36,11 +36,10 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
             modelo= new DefaultTableModel ();
             armarCabecera();
             pd = new PrestadorData (new Conexion());
-            
-            cargarDatos();
             ed = new EspecialidadData (new Conexion());
             traerEspecialidades();
             cbEspecialidadd.setSelectedIndex(1);
+            cargarDatos();
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Error de Conexion");
       
@@ -351,6 +350,7 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
         chbActivo.setEnabled(true);
         btGuardar.setEnabled(true);
         btModificar.setEnabled(false);
+        btNuevo.setEnabled(false);
     }//GEN-LAST:event_btModificarActionPerformed
 
     private void tbPrestadoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrestadoresMouseClicked
