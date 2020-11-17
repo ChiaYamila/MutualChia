@@ -315,6 +315,7 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
             pre.setApellido(tfApellido.getText());
             pre.setDni((Long.parseLong(tfDni.getText())));
             pre.setActivo(chbActivo.isSelected());
+            pre.setEspecialidad((Especialidad)cbEspecialidad.getSelectedItem());
             System.out.println (pre.getNombre());
             System.out.println (pre.isActivo());
            
@@ -325,6 +326,7 @@ public class PrestadorVista extends javax.swing.JInternalFrame {
                 pre.setApellido(tfApellido.getText());
                 pre.setDni((Long.parseLong(tfDni.getText())));
                 pre.setActivo(chbActivo.isSelected());
+                pre.setEspecialidad((Especialidad)cbEspecialidad.getSelectedItem());
                 pd.actualizarPrestador(pre);
                 
             }
