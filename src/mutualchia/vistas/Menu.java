@@ -91,6 +91,11 @@ public class Menu extends javax.swing.JFrame {
         jMenu2.add(jMenuItem3);
 
         jMenuItem4.setText("Listado de Prestadores por Especialidad");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem4);
 
         jMenuBar1.add(jMenu2);
@@ -183,6 +188,16 @@ public class Menu extends javax.swing.JFrame {
         
          
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        escritorio.removeAll();
+        escritorio.repaint();
+        ListadoEspecialidad le = new ListadoEspecialidad ();
+        le.setVisible(true);
+        escritorio.add(le);
+        escritorio.moveToFront(le);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments

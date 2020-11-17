@@ -250,6 +250,11 @@ public class HorarioVista extends javax.swing.JInternalFrame {
     private void tbPrestadoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrestadoresMouseClicked
         // TODO add your handling code here:
          int fila = tbPrestadores.getSelectedRow();
+         cbEspecialidad.setSelectedItem((Especialidad)tbPrestadores.getValueAt(fila, 0));
+         cbDia.setSelectedItem(String)tbPrestadores.getValueAt(fila, 1);
+         cbHorario.setSelectedItem(Integer)tbPrestadores.getValueAt(fila, 2);
+         chbActivo.setSelected((boolean)tbPrestadores.getValueAt(fila, 3));
+         
          
         
         
