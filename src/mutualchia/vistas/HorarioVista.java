@@ -87,7 +87,6 @@ public class HorarioVista extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Especialidad");
 
-        cbEspecialidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbEspecialidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbEspecialidadActionPerformed(evt);
@@ -120,8 +119,6 @@ public class HorarioVista extends javax.swing.JInternalFrame {
 
         cbDia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" }));
 
-        cbHorario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "9", "10", "11", "12", "16", "17", "18" }));
-
         jLabel6.setText("Activo");
 
         btGuardar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -142,7 +139,6 @@ public class HorarioVista extends javax.swing.JInternalFrame {
 
         btBorrar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btBorrar.setText("Borrar");
-        btBorrar.setEnabled(false);
         btBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btBorrarActionPerformed(evt);
@@ -251,22 +247,18 @@ public class HorarioVista extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
          int fila = tbPrestadores.getSelectedRow();
          cbEspecialidad.setSelectedItem((Especialidad)tbPrestadores.getValueAt(fila, 0));
-         cbDia.setSelectedItem(String)tbPrestadores.getValueAt(fila, 1);
-         cbHorario.setSelectedItem(Integer)tbPrestadores.getValueAt(fila, 2);
-         chbActivo.setSelected((boolean)tbPrestadores.getValueAt(fila, 3));
-         
-         
-        
         
          pre = new Prestador ();
-        pre.setIdPrestador((int)tbPrestadores.getValueAt(fila, 0));
-        pre.setNombre((String)tbPrestadores.getValueAt(fila, 1));
-        pre.setApellido((String)tbPrestadores.getValueAt(fila, 2));
+        pre.setIdPrestador((int) tbPrestadores.getValueAt(fila, 0));
+        pre.setNombre((String)tbPrestadores.getValueAt(fila, 1)) ;
+        pre.setApellido((String) tbPrestadores.getValueAt(fila, 2));
+        pre.setEspecialidad((Especialidad) tbPrestadores.getValueAt(fila, 3));
+        pre.setActivo((boolean) tbPrestadores.getValueAt(fila, 4));
     }//GEN-LAST:event_tbPrestadoresMouseClicked
 
     private void btBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBorrarActionPerformed
         // TODO add your handling code here:
-        int idHorarioABorrar= Integer.parseInt();
+        int idHorarioABorrar= Integer.parseInt(cbEspecialidad.setSelectedItem(Especialidad));
         hd.borrarHorario(idHorarioABorrar);
         cargarDatos();
     }//GEN-LAST:event_btBorrarActionPerformed
@@ -290,19 +282,15 @@ public class HorarioVista extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (hor==null){
             hor = new Horario();
-            hor.setNombre(tfNombre.getText());
-            hor.setApellido(tfApellido.getText());
-            
+            hor.setDia(title);
+            hor.setHorarioAtencion(PROPERTIES);
             hor.setActivo(chbActivo.isSelected());
-            hor.setEspecialidad((Especialidad)cbEspecialidad.getSelectedItem());
             hd.agregarHorario(hor);
             } else {
-            hor.setIdPrestador(Integer.parseInt(tfId.getText()));
-                hor.setNombre(tfNombre.getText());
-                hor.setApellido(tfApellido.getText());
-                hor.setDni((Long.parseLong(tfDni.getText())));
+            
+                hor.setDia(title);
+                hor.setHorarioAtencion(PROPERTIES);
                 hor.setActivo(chbActivo.isSelected());
-                hor.setEspecialidad((Especialidad)cbEspecialidad.getSelectedItem());
                 hd.actualizarHorario(hor);
                 
             }
@@ -343,9 +331,10 @@ public void traerPrestadores () {
            listaHorarios = hd.obtenerHorarios();
            for(Prestador p:listaPrestadores) {
                if(p.getEspecialidad().getIdEspecialidad() == e.getIdEspecialidad()) {
-            modelo.addRow(new Object[]{p.getIdPrestador(),p.getNombre(),p.getApellido()});
+            modelo.addRow(new Object[]{p.getIdPrestador(),p.getNombre(),p.getApellido(),p.isActivo()});
                }
                 }
+        }
          
         private void borrarFilas (){
             int a =modelo.getRowCount()-1;

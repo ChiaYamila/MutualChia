@@ -71,7 +71,6 @@ public class ListadoEspecialidad extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Especialidad");
 
-        cbEspecialidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbEspecialidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbEspecialidadActionPerformed(evt);
@@ -174,7 +173,7 @@ public class ListadoEspecialidad extends javax.swing.JInternalFrame {
         pre.setNombre((String)tbPrestadores.getValueAt(fila, 1));
         pre.setApellido((String)tbPrestadores.getValueAt(fila, 2));
         
-        pre.setEspecialidad(((Especialidad)tbPrestadores.getValueAt(fila, 3)));
+        
         
     }//GEN-LAST:event_tbPrestadoresMouseClicked
  public void traerEspecialidades () {
@@ -190,7 +189,7 @@ public class ListadoEspecialidad extends javax.swing.JInternalFrame {
            listaPrestadores = pd.obtenerPrestadores();
            for(Prestador p:listaPrestadores) {
                if(p.getEspecialidad().getIdEspecialidad() == e.getIdEspecialidad()) {
-            modelo.addRow(new Object[]{p.getIdPrestador(),p.getNombre(),p.getApellido(),p.getEspecialidad(),p.isActivo()});
+            modelo.addRow(new Object[]{p.getIdPrestador(),p.getNombre(),p.getApellido(),p.isActivo()});
                }
                 }
                        }
@@ -201,7 +200,7 @@ private void armarCabecera () {
             titulos.add("Nombre");
             titulos.add("Apellido");
             
-            titulos.add("Especialidad");
+            
             titulos.add("Activo");
             for(Object it:titulos) {
                 modelo.addColumn(it);
