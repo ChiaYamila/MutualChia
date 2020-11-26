@@ -47,6 +47,7 @@ public class HorarioVista extends javax.swing.JInternalFrame {
             hd = new HorarioData (new Conexion());
             traerEspecialidades();
             traerPrestadores ();
+            //traerHorario();
             
             cbEspecialidad.setSelectedIndex(1);
             cargarDatos();
@@ -80,6 +81,8 @@ public class HorarioVista extends javax.swing.JInternalFrame {
         btModificar = new javax.swing.JButton();
         btBorrar = new javax.swing.JButton();
         btSalir = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbHorarios = new javax.swing.JTable();
 
         jLabel1.setFont(new java.awt.Font("Sylfaen", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 51));
@@ -119,6 +122,8 @@ public class HorarioVista extends javax.swing.JInternalFrame {
 
         cbDia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" }));
 
+        cbHorario.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 9,10,11,12,14,15,16,17 }));
+
         jLabel6.setText("Activo");
 
         btGuardar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -153,38 +158,28 @@ public class HorarioVista extends javax.swing.JInternalFrame {
             }
         });
 
+        tbHorarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbHorarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbHorariosMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tbHorarios);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(60, 60, 60)
-                        .addComponent(cbEspecialidad, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel4)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(jLabel5)
-                                    .addGap(18, 18, 18))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel6)
-                                    .addGap(83, 83, 83)))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(chbActivo)
-                                .addComponent(cbHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(135, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,13 +188,44 @@ public class HorarioVista extends javax.swing.JInternalFrame {
                         .addGap(69, 69, 69))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btGuardar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btModificar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(2, 2, 2)
                         .addComponent(btBorrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btSalir)
                         .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addGap(83, 83, 83)
+                                        .addComponent(chbActivo)
+                                        .addGap(7, 7, 7)))
+                                .addGap(61, 61, 61))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(8, 8, 8)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbHorario, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(30, 30, 30)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(24, 24, 24)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(60, 60, 60)
+                        .addComponent(cbEspecialidad, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,29 +236,39 @@ public class HorarioVista extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbEspecialidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(cbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(cbHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(chbActivo))
-                .addGap(1, 1, 1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btGuardar)
-                    .addComponent(btModificar)
-                    .addComponent(btBorrar)
-                    .addComponent(btSalir))
-                .addGap(26, 26, 26))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(cbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(cbHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(chbActivo))
+                                .addGap(1, 1, 1))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)))
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btGuardar)
+                            .addComponent(btModificar)
+                            .addComponent(btBorrar)
+                            .addComponent(btSalir))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         pack();
@@ -243,23 +279,10 @@ public class HorarioVista extends javax.swing.JInternalFrame {
         dispose();
     }//GEN-LAST:event_btSalirActionPerformed
 
-    private void tbPrestadoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrestadoresMouseClicked
-        // TODO add your handling code here:
-         int fila = tbPrestadores.getSelectedRow();
-         cbEspecialidad.setSelectedItem((Especialidad)tbPrestadores.getValueAt(fila, 0));
-        
-         pre = new Prestador ();
-        pre.setIdPrestador((int) tbPrestadores.getValueAt(fila, 0));
-        pre.setNombre((String)tbPrestadores.getValueAt(fila, 1)) ;
-        pre.setApellido((String) tbPrestadores.getValueAt(fila, 2));
-        pre.setEspecialidad((Especialidad) tbPrestadores.getValueAt(fila, 3));
-        pre.setActivo((boolean) tbPrestadores.getValueAt(fila, 4));
-    }//GEN-LAST:event_tbPrestadoresMouseClicked
-
     private void btBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBorrarActionPerformed
         // TODO add your handling code here:
-        int idHorarioABorrar= Integer.parseInt(cbEspecialidad.setSelectedItem(Especialidad));
-        hd.borrarHorario(idHorarioABorrar);
+        //int idHorarioABorrar= Integer.parseInt(cbEspecialidad.setSelectedItem(Especialidad));
+        //hd.borrarHorario(idHorarioABorrar);
         cargarDatos();
     }//GEN-LAST:event_btBorrarActionPerformed
 
@@ -282,19 +305,49 @@ public class HorarioVista extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (hor==null){
             hor = new Horario();
-            hor.setDia(title);
-            hor.setHorarioAtencion(PROPERTIES);
+            hor.setDia((String)cbDia.getSelectedItem());
+            hor.setHorarioAtencion((Integer)cbHorario.getSelectedItem());
             hor.setActivo(chbActivo.isSelected());
+            
+            int fila = tbPrestadores.getSelectedRow();
+            int idPrestador=(Integer)tbPrestadores.getValueAt(fila, 0);
+            Prestador p = new Prestador();
+            p.setIdPrestador(idPrestador);
+            hor.setPrestador(p);
             hd.agregarHorario(hor);
             } else {
             
-                hor.setDia(title);
-                hor.setHorarioAtencion(PROPERTIES);
-                hor.setActivo(chbActivo.isSelected());
+                hor.setDia((String)cbDia.getSelectedItem());
+            hor.setHorarioAtencion((Integer)cbHorario.getSelectedItem());
+            hor.setActivo(chbActivo.isSelected());
+            
+            int fila = tbPrestadores.getSelectedRow();
+            int idPrestador=(Integer)tbPrestadores.getValueAt(fila, 0);
+            Prestador p = new Prestador();
+            p.setIdPrestador(idPrestador);
+            hor.setPrestador(p);
                 hd.actualizarHorario(hor);
                 
             }
     }//GEN-LAST:event_btGuardarActionPerformed
+
+    private void tbPrestadoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrestadoresMouseClicked
+        // TODO add your handling code here:
+        //int fila = tbPrestadores.getSelectedRow();
+        //cbEspecialidad.setSelectedItem((Especialidad)tbPrestadores.getValueAt(fila, 0));
+
+        //pre = new Prestador ();
+       //pre.setIdPrestador((int) tbPrestadores.getValueAt(fila, 0));
+        //pre.setNombre((String)tbPrestadores.getValueAt(fila, 1)) ;
+        //pre.setApellido((String) tbPrestadores.getValueAt(fila, 2));
+        //pre.setEspecialidad((Especialidad) tbPrestadores.getValueAt(fila, 3));
+        //pre.setActivo((boolean) tbPrestadores.getValueAt(fila, 4));
+    }//GEN-LAST:event_tbPrestadoresMouseClicked
+
+    private void tbHorariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbHorariosMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tbHorariosMouseClicked
 
 public void traerEspecialidades () {
     List <Especialidad> lista = ed.obtenerEspecialidades();
@@ -309,6 +362,13 @@ public void traerPrestadores () {
         tbPrestadores.setModel(modelo);
     }
 }
+
+//public void traerHorario () {
+//List <Horario> lista = hd.obtenerHorariosxPrestador();
+//for (Horario h:lista) {
+//tbHorarios.setModel(modelo);
+//}
+//}
   
             
     private void armarCabecera () {
@@ -362,6 +422,8 @@ public void traerPrestadores () {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tbHorarios;
     private javax.swing.JTable tbPrestadores;
     // End of variables declaration//GEN-END:variables
 }

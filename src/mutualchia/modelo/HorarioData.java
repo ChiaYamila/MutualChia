@@ -36,7 +36,7 @@ public class HorarioData {
     public void agregarHorario (Horario horario) {
        
         try {
-            String sql = "INSERT INTO horario (dia,horarioAtencion,idPrestador) VALUES ( ?, ?, ?,?);";
+            String sql = "INSERT INTO horario (dia, horarioAtencion, idPrestador, activo) VALUES ( ?, ?, ?, ?);";
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         
             ps.setString(1, horario.getDia());
@@ -163,5 +163,39 @@ public class HorarioData {
             System.out.println("Error al actualizar un horario: " + ex.getMessage());
         }
      }
+      
+      public List<Horario> obtenerHorariosxPrestador( int idPrestador){
+        List<Horario> horarios = new ArrayList<Horario>();
+            
+        try {
+            String sql = "SELECT * FROM horario where idPrestador = ?;";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet resultSet = ps.executeQuery();
+            Horario hor;
+            while(resultSet.next()){
+                //Creo una especialidad vacia
+                hor = new Horario();
+                //seteo los datos
+                hor.setIdHorario(resultSet.getInt("idHorario"));
+                hor.setDia(resultSet.getString("dia"));
+                hor.setHorarioAtencion(resultSet.getInt("horarioAtencion"));
+                hor.setActivo(resultSet.getBoolean("activo"));
+                //Buscar Horario
+                int IdPrestador = resultSet.getInt("idPrestador");
+                PrestadorData pd = new PrestadorData (conexion);
+                Prestador pre = pd.buscarPrestador(IdPrestador);
+                hor.setPrestador(pre);
+                
+                //Agrego la nueva especialidad al arraylist
+                horarios.add(hor);
+            }      
+            ps.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener horarios: " + ex.getMessage());
+        }
+        
+        
+        return horarios;
+    }
     
 }
