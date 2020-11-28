@@ -47,7 +47,7 @@ public class HorarioVista extends javax.swing.JInternalFrame {
             hd = new HorarioData (new Conexion());
             traerEspecialidades();
             traerPrestadores ();
-            //traerHorario();
+           // traerHorario();
             
             cbEspecialidad.setSelectedIndex(1);
             cargarDatos();
@@ -333,19 +333,34 @@ public class HorarioVista extends javax.swing.JInternalFrame {
 
     private void tbPrestadoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrestadoresMouseClicked
         // TODO add your handling code here:
-        //int fila = tbPrestadores.getSelectedRow();
-        //cbEspecialidad.setSelectedItem((Especialidad)tbPrestadores.getValueAt(fila, 0));
+        int fila = tbPrestadores.getSelectedRow();
+        cbEspecialidad.setSelectedItem((Especialidad)tbPrestadores.getValueAt(fila, 0));
 
-        //pre = new Prestador ();
-       //pre.setIdPrestador((int) tbPrestadores.getValueAt(fila, 0));
-        //pre.setNombre((String)tbPrestadores.getValueAt(fila, 1)) ;
-        //pre.setApellido((String) tbPrestadores.getValueAt(fila, 2));
-        //pre.setEspecialidad((Especialidad) tbPrestadores.getValueAt(fila, 3));
-        //pre.setActivo((boolean) tbPrestadores.getValueAt(fila, 4));
+        pre = new Prestador ();
+       pre.setIdPrestador((int) tbPrestadores.getValueAt(fila, 0));
+        pre.setNombre((String)tbPrestadores.getValueAt(fila, 1)) ;
+        pre.setApellido((String) tbPrestadores.getValueAt(fila, 2));
+        pre.setEspecialidad((Especialidad) tbPrestadores.getValueAt(fila, 3));
+        pre.setActivo((boolean) tbPrestadores.getValueAt(fila, 4));
+        //Profe deberia hacer un int fila horario?
     }//GEN-LAST:event_tbPrestadoresMouseClicked
 
     private void tbHorariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbHorariosMouseClicked
         // TODO add your handling code here:
+        int fila = tbHorarios.getSelectedRow();
+        
+        tbPrestadores.setColumnModel((Prestadores)tbHorarios.getValueAt(fila, 0));
+         
+        hor = new Horario ();
+        hor.setIdHorario((int)tbHorarios.getValueAt(fila, 0));
+        hor.setDia((String)cbDia.getSelectedItem());
+        hor.setHorarioAtencion((Integer)cbHorario.getSelectedItem());
+        
+        int fila = tbPrestadores.getSelectedRow();
+            int idPrestador=(Integer)tbPrestadores.getValueAt(fila, 0);
+            Prestador p = new Prestador();
+            p.setIdPrestador(idPrestador);
+            hor.setPrestador(p);
         
     }//GEN-LAST:event_tbHorariosMouseClicked
 
@@ -363,12 +378,12 @@ public void traerPrestadores () {
     }
 }
 
-//public void traerHorario () {
-//List <Horario> lista = hd.obtenerHorariosxPrestador();
-//for (Horario h:lista) {
-//tbHorarios.setModel(modelo);
-//}
-//}
+public void traerHorario () {
+   List <Horario> lista = hd.obtenerHorariosxPrestador(idPrestador);
+    for (Horario h:lista) {
+    tbHorarios.setModel(modelo);
+    }
+}
   
             
     private void armarCabecera () {
