@@ -25,6 +25,7 @@ import mutualchia.modelo.HorarioData;
  */
 public class HorarioVista extends javax.swing.JInternalFrame {
      private DefaultTableModel modelo;
+     private DefaultTableModel modeloHorarios;
     private PrestadorData pd;
     private List<Prestador> listaPrestadores;
     private Prestador pre;
@@ -41,16 +42,17 @@ public class HorarioVista extends javax.swing.JInternalFrame {
         try {
         initComponents();
         modelo= new DefaultTableModel ();
+        modeloHorarios= new DefaultTableModel ();
             armarCabecera();
+            armarCabeceraHorarios();
             pd = new PrestadorData (new Conexion());
             ed = new EspecialidadData (new Conexion());
             hd = new HorarioData (new Conexion());
             traerEspecialidades();
             traerPrestadores ();
-           // traerHorario();
-            
-            cbEspecialidad.setSelectedIndex(1);
+           cbEspecialidad.setSelectedIndex(1);
             cargarDatos();
+            //cargarDatosHorarios();
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Error de Conexion");
     }
@@ -136,6 +138,7 @@ public class HorarioVista extends javax.swing.JInternalFrame {
 
         btModificar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btModificar.setText("Modificar");
+        btModificar.setEnabled(false);
         btModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btModificarActionPerformed(evt);
@@ -144,6 +147,7 @@ public class HorarioVista extends javax.swing.JInternalFrame {
 
         btBorrar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btBorrar.setText("Borrar");
+        btBorrar.setEnabled(false);
         btBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btBorrarActionPerformed(evt);
@@ -281,9 +285,9 @@ public class HorarioVista extends javax.swing.JInternalFrame {
 
     private void btBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBorrarActionPerformed
         // TODO add your handling code here:
-        //int idHorarioABorrar= Integer.parseInt(cbEspecialidad.setSelectedItem(Especialidad));
-        //hd.borrarHorario(idHorarioABorrar);
-        cargarDatos();
+        int idHorarioABorrar= Integer.parseInt(tbHorarios.getSelectedRow());
+        hd.borrarHorario(idHorarioABorrar);
+        cargarDatosHorarios();
     }//GEN-LAST:event_btBorrarActionPerformed
 
     private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
@@ -314,8 +318,14 @@ public class HorarioVista extends javax.swing.JInternalFrame {
             Prestador p = new Prestador();
             p.setIdPrestador(idPrestador);
             hor.setPrestador(p);
+           if (hd.existeHorario(idPrestador, (String)cbDia.getSelectedItem(), (Integer)cbHorario.getSelectedItem()) ==null) {
             hd.agregarHorario(hor);
+             cargarDatosHorarios((Integer)tbPrestadores.getValueAt(fila, 0));
             } else {
+        JOptionPane.showMessageDialog(this, "Horario ya asignado");
+        }
+        }
+        else {
             
                 hor.setDia((String)cbDia.getSelectedItem());
             hor.setHorarioAtencion((Integer)cbHorario.getSelectedItem());
@@ -326,42 +336,41 @@ public class HorarioVista extends javax.swing.JInternalFrame {
             Prestador p = new Prestador();
             p.setIdPrestador(idPrestador);
             hor.setPrestador(p);
-                hd.actualizarHorario(hor);
+                if (hd.existeHorario(idPrestador, (String)cbDia.getSelectedItem(), (Integer)cbHorario.getSelectedItem()) ==null){
+            hd.actualizarHorario(hor);
+             cargarDatosHorarios((Integer)tbPrestadores.getValueAt(fila, 0));
+            } else {
+        JOptionPane.showMessageDialog(this, "Horario ya asignado");
+        } 
+    }
                 
-            }
+                
+            
+        hor=null;
+       
     }//GEN-LAST:event_btGuardarActionPerformed
 
     private void tbPrestadoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrestadoresMouseClicked
         // TODO add your handling code here:
         int fila = tbPrestadores.getSelectedRow();
-        cbEspecialidad.setSelectedItem((Especialidad)tbPrestadores.getValueAt(fila, 0));
+        if(fila!=-1);
+       
 
-        pre = new Prestador ();
-       pre.setIdPrestador((int) tbPrestadores.getValueAt(fila, 0));
-        pre.setNombre((String)tbPrestadores.getValueAt(fila, 1)) ;
-        pre.setApellido((String) tbPrestadores.getValueAt(fila, 2));
-        pre.setEspecialidad((Especialidad) tbPrestadores.getValueAt(fila, 3));
-        pre.setActivo((boolean) tbPrestadores.getValueAt(fila, 4));
-        //Profe deberia hacer un int fila horario?
+        //pre = new Prestador ();
+       //pre.setIdPrestador((int) tbPrestadores.getValueAt(fila, 0));
+        //pre.setNombre((String)tbPrestadores.getValueAt(fila, 1)) ;
+        //pre.setApellido((String) tbPrestadores.getValueAt(fila, 2));
+        //pre.setEspecialidad((Especialidad) tbPrestadores.getValueAt(fila, 3));
+        //pre.setActivo((boolean) tbPrestadores.getValueAt(fila, 4));
+        
+        cargarDatosHorarios((int) tbPrestadores.getValueAt(fila, 0));
+        
     }//GEN-LAST:event_tbPrestadoresMouseClicked
 
     private void tbHorariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbHorariosMouseClicked
         // TODO add your handling code here:
-        int fila = tbHorarios.getSelectedRow();
-        
-        tbPrestadores.setColumnModel((Prestadores)tbHorarios.getValueAt(fila, 0));
-         
-        hor = new Horario ();
-        hor.setIdHorario((int)tbHorarios.getValueAt(fila, 0));
-        hor.setDia((String)cbDia.getSelectedItem());
-        hor.setHorarioAtencion((Integer)cbHorario.getSelectedItem());
-        
-        int fila = tbPrestadores.getSelectedRow();
-            int idPrestador=(Integer)tbPrestadores.getValueAt(fila, 0);
-            Prestador p = new Prestador();
-            p.setIdPrestador(idPrestador);
-            hor.setPrestador(p);
-        
+        btModificar.setEnabled(true);
+        btBorrar.setEnabled(true);
     }//GEN-LAST:event_tbHorariosMouseClicked
 
 public void traerEspecialidades () {
@@ -378,12 +387,6 @@ public void traerPrestadores () {
     }
 }
 
-public void traerHorario () {
-   List <Horario> lista = hd.obtenerHorariosxPrestador(idPrestador);
-    for (Horario h:lista) {
-    tbHorarios.setModel(modelo);
-    }
-}
   
             
     private void armarCabecera () {
@@ -398,6 +401,19 @@ public void traerHorario () {
             tbPrestadores.setModel(modelo);
             
         }
+    private void armarCabeceraHorarios () {
+            ArrayList<Object> titulos=new ArrayList<Object>();
+            titulos.add("ID");
+            titulos.add("Dia");
+            titulos.add("HorarioAtencion");
+            titulos.add("Activo");
+          
+            for(Object it:titulos) {
+                modeloHorarios.addColumn(it);
+            }
+            tbHorarios.setModel(modeloHorarios);
+            
+        }
         
         private void cargarDatos () {
             borrarFilas ();
@@ -410,12 +426,36 @@ public void traerHorario () {
                }
                 }
         }
+        
+         private void cargarDatosHorarios (int idPrestador) {
+         try {
+             borrarFilasHorarios ();
+             HorarioData hd = new HorarioData(new Conexion());
+             List <Horario> listaHorarios=hd.obtenerHorariosxPrestador(idPrestador);
+             for(Horario h:listaHorarios) {
+                 
+                 modeloHorarios.addRow(new Object[]{h.getIdHorario(),h.getDia(),h.getHorarioAtencion(),h.isActivo()});
+             }
+         } catch (ClassNotFoundException ex) {
+             JOptionPane.showMessageDialog(this, "Error al recuperar horarios");
+         }
+                }
+        
          
         private void borrarFilas (){
             int a =modelo.getRowCount()-1;
             for(int i=a;i>=0;i--){
 
                 modelo.removeRow(i );
+                
+
+        }
+        }
+         private void borrarFilasHorarios (){
+            int a =modeloHorarios.getRowCount()-1;
+            for(int i=a;i>=0;i--){
+
+                modeloHorarios.removeRow(i );
                 
 
         }

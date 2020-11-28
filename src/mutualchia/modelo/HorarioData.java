@@ -170,6 +170,7 @@ public class HorarioData {
         try {
             String sql = "SELECT * FROM horario where idPrestador = ?;";
             PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idPrestador);
             ResultSet resultSet = ps.executeQuery();
             Horario hor;
             while(resultSet.next()){
@@ -196,6 +197,43 @@ public class HorarioData {
         
         
         return horarios;
+    }
+      
+       public Horario existeHorario( int idPrestador, String dia, int horarioAtencion ){
+        Horario hor=null;
+            
+        try {
+            String sql = "SELECT * FROM horario where idPrestador = ? and dia = ? and horarioAtencion =?;";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idPrestador);
+            ps.setString(2, dia);
+            ps.setInt(3, horarioAtencion);
+            ResultSet resultSet = ps.executeQuery();
+            
+            while(resultSet.next()){
+                //Creo una especialidad vacia
+                hor = new Horario();
+                //seteo los datos
+                hor.setIdHorario(resultSet.getInt("idHorario"));
+                hor.setDia(resultSet.getString("dia"));
+                hor.setHorarioAtencion(resultSet.getInt("horarioAtencion"));
+                hor.setActivo(resultSet.getBoolean("activo"));
+                //Buscar Horario
+                int IdPrestador = resultSet.getInt("idPrestador");
+                PrestadorData pd = new PrestadorData (conexion);
+                Prestador pre = pd.buscarPrestador(IdPrestador);
+                hor.setPrestador(pre);
+                
+                
+                
+            }      
+            ps.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener horarios: " + ex.getMessage());
+        }
+        
+        
+        return hor;
     }
     
 }
