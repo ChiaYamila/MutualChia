@@ -285,13 +285,17 @@ public class HorarioVista extends javax.swing.JInternalFrame {
 
     private void btBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBorrarActionPerformed
         // TODO add your handling code here:
-        int idHorarioABorrar= Integer.parseInt(tbHorarios.getSelectedRow());
-        hd.borrarHorario(idHorarioABorrar);
-        cargarDatosHorarios();
+        int fila = tbHorarios.getSelectedRow();
+        int idHorario = (Integer) tbHorarios.getValueAt(fila, 0);
+        hd.borrarHorario(idHorario);
     }//GEN-LAST:event_btBorrarActionPerformed
 
     private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
         // TODO add your handling code here:
+        int fila = tbHorarios.getSelectedRow();
+        int idHorario = (Integer) tbHorarios.getValueAt(fila, 0);
+        hd.actualizarHorario(hor);
+        
         cbDia.setEnabled(true);
         
         btGuardar.setEnabled(true);
