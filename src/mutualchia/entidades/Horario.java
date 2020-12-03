@@ -74,5 +74,10 @@ public class Horario {
     public void setPrestador(Prestador prestador) {
         this.prestador = prestador;
     }
+
+    @Override
+    public String toString() {
+        return "Horario{" + "idHorario=" + idHorario + ", dia=" + dia + ", horarioAtencion=" + horarioAtencion + ", prestador=" + prestador + ", activo=" + activo + '}';
+    }
    
 }

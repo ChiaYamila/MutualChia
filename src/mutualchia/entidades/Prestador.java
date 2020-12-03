@@ -85,5 +85,11 @@ public class Prestador {
         this.especialidad = especialidad;
     }
 
+    @Override
+    public String toString() {
+        return "Prestador{" + "idPrestador=" + idPrestador + ", nombre=" + nombre + ", apellido=" + apellido + ", dni=" + dni + ", activo=" + activo + ", especialidad=" + especialidad + '}';
+    }
+    
+
     
 }

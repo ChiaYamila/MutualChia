@@ -80,7 +80,6 @@ public class HorarioVista extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         chbActivo = new javax.swing.JCheckBox();
         btGuardar = new javax.swing.JButton();
-        btModificar = new javax.swing.JButton();
         btBorrar = new javax.swing.JButton();
         btSalir = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -136,15 +135,6 @@ public class HorarioVista extends javax.swing.JInternalFrame {
             }
         });
 
-        btModificar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btModificar.setText("Modificar");
-        btModificar.setEnabled(false);
-        btModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btModificarActionPerformed(evt);
-            }
-        });
-
         btBorrar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btBorrar.setText("Borrar");
         btBorrar.setEnabled(false);
@@ -192,11 +182,9 @@ public class HorarioVista extends javax.swing.JInternalFrame {
                         .addGap(69, 69, 69))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btGuardar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btModificar)
-                        .addGap(2, 2, 2)
+                        .addGap(44, 44, 44)
                         .addComponent(btBorrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(59, 59, 59)
                         .addComponent(btSalir)
                         .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
@@ -246,7 +234,7 @@ public class HorarioVista extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel4)
                                     .addComponent(cbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -266,7 +254,6 @@ public class HorarioVista extends javax.swing.JInternalFrame {
                         .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btGuardar)
-                            .addComponent(btModificar)
                             .addComponent(btBorrar)
                             .addComponent(btSalir))
                         .addContainerGap())
@@ -288,21 +275,8 @@ public class HorarioVista extends javax.swing.JInternalFrame {
         int fila = tbHorarios.getSelectedRow();
         int idHorario = (Integer) tbHorarios.getValueAt(fila, 0);
         hd.borrarHorario(idHorario);
+        cargarDatosHorarios(hor.getPrestador().getIdPrestador());
     }//GEN-LAST:event_btBorrarActionPerformed
-
-    private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
-        // TODO add your handling code here:
-        int fila = tbHorarios.getSelectedRow();
-        int idHorario = (Integer) tbHorarios.getValueAt(fila, 0);
-        hd.actualizarHorario(hor);
-        
-        cbDia.setEnabled(true);
-        
-        btGuardar.setEnabled(true);
-        btModificar.setEnabled(false);
-        cbHorario.setEnabled(true);
-        chbActivo.setEnabled(true);
-    }//GEN-LAST:event_btModificarActionPerformed
 
     private void cbEspecialidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEspecialidadActionPerformed
         // TODO add your handling code here:
@@ -330,8 +304,8 @@ public class HorarioVista extends javax.swing.JInternalFrame {
         }
         }
         else {
-            
-                hor.setDia((String)cbDia.getSelectedItem());
+                
+            hor.setDia((String)cbDia.getSelectedItem());
             hor.setHorarioAtencion((Integer)cbHorario.getSelectedItem());
             hor.setActivo(chbActivo.isSelected());
             
@@ -349,7 +323,7 @@ public class HorarioVista extends javax.swing.JInternalFrame {
     }
                 
                 
-            
+         System.out.println(hor);
         hor=null;
        
     }//GEN-LAST:event_btGuardarActionPerformed
@@ -373,8 +347,31 @@ public class HorarioVista extends javax.swing.JInternalFrame {
 
     private void tbHorariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbHorariosMouseClicked
         // TODO add your handling code here:
-        btModificar.setEnabled(true);
+        hor = new Horario();
+            hor.setDia((String)cbDia.getSelectedItem());
+            hor.setHorarioAtencion((Integer)cbHorario.getSelectedItem());
+            hor.setActivo(chbActivo.isSelected());
+            
+            int filap = tbPrestadores.getSelectedRow();
+            int idPrestador=(Integer)tbPrestadores.getValueAt(filap, 0);
+            Prestador p = new Prestador();
+            p.setIdPrestador(idPrestador);
+            hor.setPrestador(p);
+            
         btBorrar.setEnabled(true);
+        
+        
+        int fila=tbHorarios.getSelectedRow();
+        String dia = (String) tbHorarios.getValueAt(fila, 1);
+        Integer horario = (Integer) tbHorarios.getValueAt(fila, 2);
+        Boolean activo = (Boolean) tbHorarios.getValueAt(fila, 3);
+        Integer idHorario = (Integer) tbHorarios.getValueAt(fila, 0);
+        hor.setIdHorario(idHorario);
+        
+        cbDia.setSelectedItem(dia);
+        cbHorario.setSelectedItem(horario);
+        chbActivo.setSelected(activo);
+
     }//GEN-LAST:event_tbHorariosMouseClicked
 
 public void traerEspecialidades () {
@@ -468,7 +465,6 @@ public void traerPrestadores () {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBorrar;
     private javax.swing.JButton btGuardar;
-    private javax.swing.JButton btModificar;
     private javax.swing.JButton btSalir;
     private javax.swing.JComboBox<String> cbDia;
     private javax.swing.JComboBox<Especialidad> cbEspecialidad;
