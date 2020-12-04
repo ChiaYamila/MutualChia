@@ -151,5 +151,33 @@ public class AfiliadoData {
             System.out.println("Error al actualizar un afiliado: " + ex.getMessage());
         }
      }
+     public Afiliado buscarAfiliadoXDni(long dni){
+    Afiliado afiliado=null;
+    
+    try {           
+            String sql = "SELECT * FROM afiliado WHERE dni =?;";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setLong(1, dni);            
+            ResultSet resultSet=ps.executeQuery();
+            
+            while(resultSet.next()){
+                afiliado = new Afiliado();
+                
+                afiliado.setIdAfiliado(resultSet.getInt("idAfiliado"));
+                afiliado.setNombre(resultSet.getString("nombre"));
+                afiliado.setApellido(resultSet.getString("apellido"));
+                afiliado.setDni(resultSet.getLong("dni"));
+                afiliado.setActivo(resultSet.getBoolean("activo"));
+            }      
+            ps.close();                      
+            
+            
+    
+        } catch (SQLException ex) {
+            System.out.println("Error al buscar un afiliado: " + ex.getMessage());
+        }
+        
+        return afiliado;
+     }
         }
     

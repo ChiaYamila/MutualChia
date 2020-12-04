@@ -5,17 +5,33 @@
  */
 package mutualchia.vistas;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import mutualchia.Conexion;
+import mutualchia.entidades.Orden;
+import mutualchia.modelo.OrdenData;
+
 /**
  *
  * @author Cacho
  */
 public class ListadoOrdenA extends javax.swing.JInternalFrame {
-
+ private DefaultTableModel modelo;
+    private Orden ord;
+    private OrdenData od;
     /**
      * Creates new form ListadoOrdenA
      */
     public ListadoOrdenA() {
-        initComponents();
+         try {
+        modelo= new DefaultTableModel ();
+        armarCabecera();
+        od = new OrdenData (new Conexion());
+    } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Error de Conexion");
+    }
+    
     }
 
     /**
@@ -112,7 +128,18 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         dispose ();
     }//GEN-LAST:event_btSalirActionPerformed
-
+private void armarCabecera () {
+            ArrayList<Object> titulos=new ArrayList<Object>();
+            titulos.add("ID");
+            titulos.add("FechaTurno");
+            titulos.add("Prestador");
+            
+          
+            for(Object it:titulos) {
+                modelo.addColumn(it);
+            }
+            tbOrdenes.setModel(modelo);
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBuscar;

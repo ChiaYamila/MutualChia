@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class Orden {
     private int idOrden;
     private LocalDate fecha;
+    private LocalDate fechaTurno;
     private String formaPago;
     private float importe;
     private Afiliado afiliado;
@@ -22,8 +23,9 @@ public class Orden {
     public Orden() {
     }
 
-    public Orden(LocalDate fecha, String formaPago, float importe, Afiliado afiliado, Horario horario, boolean activo) {
+    public Orden(LocalDate fecha, LocalDate fechaTurno, String formaPago, float importe, Afiliado afiliado, Horario horario, boolean activo) {
         this.fecha = fecha;
+        this.fechaTurno = fechaTurno;
         this.formaPago = formaPago;
         this.importe = importe;
         this.afiliado = afiliado;
@@ -31,9 +33,10 @@ public class Orden {
         this.activo = activo;
     }
 
-    public Orden(int idOrden, LocalDate fecha, String formaPago, float importe, Afiliado afiliado, Horario horario, boolean activo) {
+    public Orden(int idOrden, LocalDate fecha, LocalDate fechaTurno, String formaPago, float importe, Afiliado afiliado, Horario horario, boolean activo) {
         this.idOrden = idOrden;
         this.fecha = fecha;
+        this.fechaTurno = fechaTurno;
         this.formaPago = formaPago;
         this.importe = importe;
         this.afiliado = afiliado;
@@ -57,6 +60,13 @@ public class Orden {
         this.fecha = fecha;
     }
 
+    public LocalDate getFechaTurno() {
+        return fechaTurno;
+    }
+
+    public void setFechaTurno(LocalDate fechaTurno) {
+        this.fechaTurno = fechaTurno;
+    }
     public String getFormaPago() {
         return formaPago;
     }

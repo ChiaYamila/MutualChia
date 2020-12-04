@@ -5,6 +5,7 @@
  */
 package mutualchia.vistas;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ import mutualchia.modelo.PrestadorData;
  * @author Cacho
  */
 public class OrdenVista extends javax.swing.JInternalFrame {
-    private DefaultTableModel modeloHorarios;
+    private DefaultTableModel modelo;
     private PrestadorData pd;
     private List<Prestador> listaPrestadores;
     private Prestador pre;
@@ -49,7 +50,7 @@ public class OrdenVista extends javax.swing.JInternalFrame {
     public OrdenVista() {
         try {
             initComponents();
-            modeloHorarios= new DefaultTableModel ();
+            modelo= new DefaultTableModel ();
             armarCabeceraHorarios();
             pd = new PrestadorData (new Conexion());
             hd = new HorarioData (new Conexion());
@@ -57,9 +58,9 @@ public class OrdenVista extends javax.swing.JInternalFrame {
             ad = new AfiliadoData (new Conexion());
             
             traerPrestadores ();
-            
+            tfFecha.setText(LocalDate.now().toString());
             cbPrestadores.setSelectedIndex(1);
-            cargarDatos (-1);
+           
             
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Error de Conexion");;
@@ -81,7 +82,7 @@ public class OrdenVista extends javax.swing.JInternalFrame {
         btEmitir = new javax.swing.JButton();
         btSalir = new javax.swing.JButton();
         tfDni = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btBuscar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cbPrestadores = new javax.swing.JComboBox<>();
@@ -90,7 +91,14 @@ public class OrdenVista extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         tfImporte = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbPago = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        tfNombre = new javax.swing.JTextField();
+        tfApellido = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        tfFecha = new javax.swing.JTextField();
+        dcFecha = new com.toedter.calendar.JDateChooser();
 
         jLabel1.setFont(new java.awt.Font("Sylfaen", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 51));
@@ -118,11 +126,11 @@ public class OrdenVista extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButton1.setText("Buscar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btBuscar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btBuscar.setText("Buscar");
+        btBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btBuscarActionPerformed(evt);
             }
         });
 
@@ -158,12 +166,30 @@ public class OrdenVista extends javax.swing.JInternalFrame {
 
         jLabel5.setText("MEDIO DE PAGO");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Efectivo", "Tarjeta Credito", "Tarjeta Debito", "Descuento por Planilla" }));
+        cbPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Efectivo", "Tarjeta Credito", "Tarjeta Debito", "Descuento por Planilla" }));
+
+        jLabel6.setText("NOMBRE AFILIADO");
+
+        jLabel7.setText("APELLIDO AFILIADO");
+
+        tfNombre.setEditable(false);
+
+        tfApellido.setEditable(false);
+
+        jLabel8.setText("FECHA EMISION");
+
+        tfFecha.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btEmitir)
+                .addGap(29, 29, 29)
+                .addComponent(btSalir)
+                .addGap(66, 66, 66))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -171,35 +197,47 @@ public class OrdenVista extends javax.swing.JInternalFrame {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(72, 72, 72)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGap(18, 18, 18)
-                                        .addComponent(cbPrestadores, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(tfImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(cbPago, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel2)
                                         .addGap(18, 18, 18)
-                                        .addComponent(tfDni, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(tfDni, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btBuscar))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addComponent(jLabel6)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(tfNombre))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addComponent(jLabel7)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tfImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(198, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btEmitir)
-                .addGap(29, 29, 29)
-                .addComponent(btSalir)
-                .addGap(66, 66, 66))
+                                .addComponent(jLabel8)
+                                .addGap(28, 28, 28)
+                                .addComponent(tfFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(cbPrestadores, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(dcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(67, 67, 67))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(59, 59, 59)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(178, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,22 +247,34 @@ public class OrdenVista extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel2))
+                    .addComponent(btBuscar)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel8)
+                    .addComponent(tfFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(cbPrestadores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cbPrestadores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3))
+                    .addComponent(dcFecha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(tfImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btEmitir)
@@ -241,7 +291,9 @@ public class OrdenVista extends javax.swing.JInternalFrame {
 
     private void cbPrestadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPrestadoresActionPerformed
         // TODO add your handling code here:
-        traerPrestadores();      
+        cargarDatosHorarios();
+        
+              
         
     }//GEN-LAST:event_cbPrestadoresActionPerformed
 
@@ -250,17 +302,25 @@ public class OrdenVista extends javax.swing.JInternalFrame {
         dispose ();
     }//GEN-LAST:event_btSalirActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarActionPerformed
         // TODO add your handling code here:
          try {
         long dniBuscar =Long.parseLong(tfDni.getText());
-        cargarDatos(dniBuscar);
+        Afiliado afi = ad.buscarAfiliadoXDni(dniBuscar);
+        if (afi!=null) {
+        tfNombre.setText(afi.getNombre());
+        tfApellido.setText(afi.getApellido());
+        } else {
+        JOptionPane.showMessageDialog(this, "Afiliado no encontrado");
+        tfDni.requestFocus();
+        }
+        
         }catch(Exception e){
         JOptionPane.showMessageDialog(this, "Usted debe introducir un numero");
         tfDni.requestFocus();
-        cargarDatos(-1);
+        
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btBuscarActionPerformed
 
     private void tbHorariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbHorariosMouseClicked
         // TODO add your handling code here:
@@ -280,9 +340,21 @@ public class OrdenVista extends javax.swing.JInternalFrame {
 
     private void btEmitirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEmitirActionPerformed
         // TODO add your handling code here:
-        //if (ord==null){
-            //ord = new Orden();
-            //afi.setDni((Long.parseLong(tfDni.getText())));
+        if (ord==null){
+            ord = new Orden();
+            afi.setDni((Long.parseLong(tfDni.getText())));
+            afi.setNombre(tfNombre.getText());
+            afi.setApellido(tfApellido.getText());
+            //ord.set = cbPrestadores.getSelectedItem();
+            ord.getImporte();
+            int fila = (Integer) tbHorarios.getSelectedRow(idHorario);
+            ord.setFormaPago(cbPago.getSelectedItem());
+            //obtener afiliado por dni
+            //prestador get Sele
+            //tabla horario (id)
+            //fecha de emision
+            //importe
+        }
        
     }//GEN-LAST:event_btEmitirActionPerformed
 
@@ -294,20 +366,21 @@ private void armarCabeceraHorarios () {
             titulos.add("Activo");
           
             for(Object it:titulos) {
-                modeloHorarios.addColumn(it);
+                modelo.addColumn(it);
             }
-            tbHorarios.setModel(modeloHorarios);
+            tbHorarios.setModel(modelo);
             
         }
 
- private void cargarDatosHorarios (int idPrestador) {
+ private void cargarDatosHorarios () {
          try {
              borrarFilasHorarios ();
+             Prestador prestador =(Prestador) cbPrestadores.getSelectedItem();
              HorarioData hd = new HorarioData(new Conexion());
-             List <Horario> listaHorarios=hd.obtenerHorariosxPrestador(idPrestador);
+             List <Horario> listaHorarios=hd.obtenerHorariosxPrestador(prestador.getIdPrestador());
              for(Horario h:listaHorarios) {
                  
-                 modeloHorarios.addRow(new Object[]{h.getIdHorario(),h.getDia(),h.getHorarioAtencion(),h.isActivo()});
+                 modelo.addRow(new Object[]{h.getIdHorario(),h.getDia(),h.getHorarioAtencion(),h.isActivo()});
              }
          } catch (ClassNotFoundException ex) {
              JOptionPane.showMessageDialog(this, "Error al recuperar horarios");
@@ -319,48 +392,43 @@ private void armarCabeceraHorarios () {
         cbPrestadores.addItem(p);
     }
  }
- private void cargarDatos (long dni) {
-            borrarFilasHorarios ();
-           listaAfiliados = ad.obtenerAfiliados();
-           for(Afiliado a:listaAfiliados) {
-               if(dni==-1){
-           //modelo.addRow(new Object[]{a.getIdAfiliado(),a.getNombre(),a.getApellido(),a.getDni(),a.isActivo()});
-               }else{
-                if(dni==a.getDni()) {
-               // modelo.addRow(new Object[]{a.getIdAfiliado(),a.getNombre(),a.getApellido(),a.getDni(),a.isActivo()});
-                
-                }
-                       }
-           }
- }
+ 
+ 
  
                
            
     
  private void borrarFilasHorarios (){
-            int a =modeloHorarios.getRowCount()-1;
+            int a =modelo.getRowCount()-1;
             for(int i=a;i>=0;i--){
 
-                modeloHorarios.removeRow(i );
+                modelo.removeRow(i );
                 
 
         }
         }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btBuscar;
     private javax.swing.JButton btEmitir;
     private javax.swing.JButton btSalir;
+    private javax.swing.JComboBox<String> cbPago;
     private javax.swing.JComboBox<Prestador> cbPrestadores;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private com.toedter.calendar.JDateChooser dcFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbHorarios;
+    private javax.swing.JTextField tfApellido;
     private javax.swing.JTextField tfDni;
+    private javax.swing.JTextField tfFecha;
     private javax.swing.JTextField tfImporte;
+    private javax.swing.JTextField tfNombre;
     // End of variables declaration//GEN-END:variables
 }

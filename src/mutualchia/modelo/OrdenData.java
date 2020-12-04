@@ -38,15 +38,16 @@ public class OrdenData {
     public void agregarOrden (Orden orden) {
        
         try {
-            String sql = "INSERT INTO orden (fecha,formaPago,importe,idAfiliado,idHorario,activo) VALUES ( ?, ?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO orden (fecha,fechaTurno,formaPago,importe,idAfiliado,idHorario,activo) VALUES ( ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         
             ps.setDate(1, Date.valueOf(orden.getFecha()));
-            ps.setString(2, orden.getFormaPago());
-            ps.setFloat(3, orden.getImporte());
-            ps.setInt(4, orden.getAfiliado().getIdAfiliado());
-            ps.setInt(5, orden.getHorario().getIdHorario());
-            ps.setBoolean(6, orden.isActivo());
+             ps.setDate(2, Date.valueOf(orden.getFechaTurno()));
+            ps.setString(3, orden.getFormaPago());
+            ps.setFloat(4, orden.getImporte());
+            ps.setInt(5, orden.getAfiliado().getIdAfiliado());
+            ps.setInt(6, orden.getHorario().getIdHorario());
+            ps.setBoolean(7, orden.isActivo());
             ps.executeUpdate();
             
             ResultSet rs = ps.getGeneratedKeys();
@@ -76,6 +77,7 @@ public class OrdenData {
                 //seteo los datos
                 ord.setIdOrden(resultSet.getInt("idOrden"));
                 ord.setFecha(resultSet.getDate("fecha").toLocalDate());
+                ord.setFechaTurno(resultSet.getDate("fechaTurno").toLocalDate());
                 ord.setFormaPago(resultSet.getString("formaPago"));
                 ord.setImporte(resultSet.getFloat("importe"));
                 //Buscar Afiliado
@@ -116,6 +118,7 @@ public class OrdenData {
                 
                orden.setIdOrden(resultSet.getInt("idOrden"));
                 orden.setFecha(resultSet.getDate("fecha").toLocalDate());
+                orden.setFecha(resultSet.getDate("fechaTurno").toLocalDate());
                 orden.setFormaPago(resultSet.getString("formaPago"));
                 orden.setImporte(resultSet.getFloat("importe"));
                //Buscar Afiliado
@@ -162,17 +165,18 @@ public class OrdenData {
     
         try {
             
-            String sql = "UPDATE orden SET fecha = ?, formaPago = ? , "
+            String sql = "UPDATE orden SET fecha = ?,fechaTurno = ?, formaPago = ? , "
                     + "importe = ?, idAfiliado = ?,idHorario = ?, activo = ?  WHERE idOrden = ?;";
 
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setDate(1, Date.valueOf(orden.getFecha()));
-            ps.setString(2, orden.getFormaPago());
-            ps.setFloat(3, orden.getImporte());
-            ps.setInt(4, orden.getAfiliado().getIdAfiliado());
-            ps.setInt(5, orden.getHorario().getIdHorario());
-            ps.setBoolean(6, orden.isActivo());
-            ps.setInt(7, orden.getIdOrden());
+             ps.setDate(2, Date.valueOf(orden.getFechaTurno()));
+            ps.setString(3, orden.getFormaPago());
+            ps.setFloat(4, orden.getImporte());
+            ps.setInt(5, orden.getAfiliado().getIdAfiliado());
+            ps.setInt(6, orden.getHorario().getIdHorario());
+            ps.setBoolean(7, orden.isActivo());
+            ps.setInt(8, orden.getIdOrden());
             ps.executeUpdate();
             
           

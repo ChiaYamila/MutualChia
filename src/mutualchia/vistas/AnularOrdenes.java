@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import mutualchia.Conexion;
 import mutualchia.entidades.Orden;
 import mutualchia.modelo.OrdenData;
 
@@ -20,7 +21,7 @@ public class AnularOrdenes extends javax.swing.JInternalFrame {
    private DefaultTableModel modelo;
     private Orden ord;
     private OrdenData od;
-}
+
 
     /**
      * Creates new form AnularOrdenes
@@ -161,18 +162,19 @@ public class AnularOrdenes extends javax.swing.JInternalFrame {
     private void tbOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbOrdenesMouseClicked
         // TODO add your handling code here:
 int fila = tbOrdenes.getSelectedRow();
- Date.valueOf fecha = (String) tbOrden.getValueAt(fila, 1);
+ //Date.valueOf fecha = (String) tbOrden.getValueAt(fila, 1);
         
-        Boolean activo = (Boolean) tbOrden.getValueAt(fila, 2);
-        Integer idHorario = (Integer) tbOrden.getValueAt(fila, 0);
-        od.(idHorario);
+        //Boolean activo = (Boolean) tbOrden.getValueAt(fila, 2);
+        //Integer idHorario = (Integer) tbOrden.getValueAt(fila, 0);
+        //od.(idHorario);
 
     }//GEN-LAST:event_tbOrdenesMouseClicked
 private void armarCabecera () {
             ArrayList<Object> titulos=new ArrayList<Object>();
             titulos.add("ID");
-            titulos.add("Fecha");
-            titulos.add("Activo");
+            titulos.add("FechaTurno");
+            titulos.add("Prestador");
+            titulos.add("Afiliado");
           
             for(Object it:titulos) {
                 modelo.addColumn(it);
