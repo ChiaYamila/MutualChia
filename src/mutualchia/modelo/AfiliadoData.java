@@ -155,7 +155,7 @@ public class AfiliadoData {
     Afiliado afiliado=null;
     
     try {           
-            String sql = "SELECT * FROM afiliado WHERE dni =?;";
+            String sql = "SELECT * FROM afiliado WHERE dni =? and activo = true;";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setLong(1, dni);            
             ResultSet resultSet=ps.executeQuery();

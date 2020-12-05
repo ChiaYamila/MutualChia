@@ -6,7 +6,9 @@
 package mutualchia.vistas;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -180,6 +182,8 @@ public class OrdenVista extends javax.swing.JInternalFrame {
 
         tfFecha.setEditable(false);
 
+        dcFecha.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -187,9 +191,9 @@ public class OrdenVista extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btEmitir)
-                .addGap(29, 29, 29)
+                .addGap(35, 35, 35)
                 .addComponent(btSalir)
-                .addGap(66, 66, 66))
+                .addGap(53, 53, 53))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -231,12 +235,13 @@ public class OrdenVista extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel3)
                                 .addGap(18, 18, 18)
                                 .addComponent(cbPrestadores, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(dcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(67, 67, 67))))
+                                .addGap(240, 240, 240))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(59, 59, 59)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(125, 125, 125)
+                        .addComponent(dcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(178, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -259,27 +264,27 @@ public class OrdenVista extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cbPrestadores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3))
-                    .addComponent(dcFecha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbPrestadores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addGap(18, 18, 18)
+                .addComponent(dcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(tfImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(cbPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btEmitir)
-                    .addComponent(btSalir))
-                .addGap(26, 26, 26))
+                    .addComponent(btSalir)
+                    .addComponent(btEmitir))
+                .addGap(16, 16, 16))
         );
 
         pack();
@@ -336,24 +341,36 @@ public class OrdenVista extends javax.swing.JInternalFrame {
         Boolean activo = (Boolean) tbHorarios.getValueAt(fila, 3);
         Integer idHorario = (Integer) tbHorarios.getValueAt(fila, 0);
         hor.setIdHorario(idHorario);
+        dcFecha.setEnabled(true);
     }//GEN-LAST:event_tbHorariosMouseClicked
 
     private void btEmitirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEmitirActionPerformed
         // TODO add your handling code here:
         if (ord==null){
             ord = new Orden();
+           Afiliado afi= ad.buscarAfiliadoXDni((Long.parseLong(tfDni.getText())));
             afi.setDni((Long.parseLong(tfDni.getText())));
-            afi.setNombre(tfNombre.getText());
-            afi.setApellido(tfApellido.getText());
-            //ord.set = cbPrestadores.getSelectedItem();
-            ord.getImporte();
-            int fila = (Integer) tbHorarios.getSelectedRow(idHorario);
-            ord.setFormaPago(cbPago.getSelectedItem());
-            //obtener afiliado por dni
-            //prestador get Sele
-            //tabla horario (id)
-            //fecha de emision
-            //importe
+            LocalDate fecha = LocalDate.now();
+            Date fechaTurno = dcFecha.getDate();
+            Float importe = Float.parseFloat(tfImporte.getText());
+            String formaPago = (String) cbPago.getSelectedItem();
+            Horario hor = new Horario ();
+            int fila = tbHorarios.getSelectedRow();
+            Integer idHorario = (Integer) tbHorarios.getValueAt(fila, 0);
+            hor.setIdHorario(idHorario);
+            ord.setAfiliado(afi);
+            ord.setFecha(fecha);
+           LocalDate ff = LocalDate.of(fechaTurno.getYear(),fechaTurno.getMonth(), fechaTurno.getDate());
+            ord.setFechaTurno(ff);
+            ord.setImporte(importe);
+            ord.setHorario(hor);
+            ord.setFormaPago(formaPago);
+            ord.setActivo(true);
+            
+            od.agregarOrden(ord);
+            
+            
+            
         }
        
     }//GEN-LAST:event_btEmitirActionPerformed
@@ -379,8 +396,13 @@ private void armarCabeceraHorarios () {
              HorarioData hd = new HorarioData(new Conexion());
              List <Horario> listaHorarios=hd.obtenerHorariosxPrestador(prestador.getIdPrestador());
              for(Horario h:listaHorarios) {
+                 if(h.isActivo()) {
+                 
+                 
                  
                  modelo.addRow(new Object[]{h.getIdHorario(),h.getDia(),h.getHorarioAtencion(),h.isActivo()});
+                 }
+                 
              }
          } catch (ClassNotFoundException ex) {
              JOptionPane.showMessageDialog(this, "Error al recuperar horarios");
