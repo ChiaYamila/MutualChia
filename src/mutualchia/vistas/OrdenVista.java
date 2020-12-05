@@ -360,14 +360,17 @@ public class OrdenVista extends javax.swing.JInternalFrame {
             hor.setIdHorario(idHorario);
             ord.setAfiliado(afi);
             ord.setFecha(fecha);
-           LocalDate ff = LocalDate.of(fechaTurno.getYear(),fechaTurno.getMonth(), fechaTurno.getDate());
-            ord.setFechaTurno(ff);
+          long tiempo = fechaTurno.getTime();
+          java.sql.Date ff = new java.sql.Date(tiempo);
+            ord.setFechaTurno(ff.toLocalDate());            
             ord.setImporte(importe);
             ord.setHorario(hor);
             ord.setFormaPago(formaPago);
             ord.setActivo(true);
             
             od.agregarOrden(ord);
+            ord = null;
+            
             
             
             
