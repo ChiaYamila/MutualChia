@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mutualchia.Conexion;
+import mutualchia.entidades.Afiliado;
 import mutualchia.entidades.Orden;
+import mutualchia.modelo.AfiliadoData;
 import mutualchia.modelo.OrdenData;
+import mutualchia.modelo.PrestadorData;
 
 /**
  *
@@ -20,6 +23,8 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
  private DefaultTableModel modelo;
     private Orden ord;
     private OrdenData od;
+    private AfiliadoData ad;
+    private PrestadorData pd;
     /**
      * Creates new form ListadoOrdenA
      */
@@ -27,6 +32,9 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
          try {
         modelo= new DefaultTableModel ();
         armarCabecera();
+        ad = new AfiliadoData (new Conexion());
+        pd =new PrestadorData (new Conexion());
+        
         od = new OrdenData (new Conexion());
     } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Error de Conexion");
@@ -47,7 +55,7 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
         tbOrdenes = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tfDni = new javax.swing.JTextField();
         btBuscar = new javax.swing.JButton();
         btSalir = new javax.swing.JButton();
 
@@ -62,14 +70,26 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbOrdenes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbOrdenesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbOrdenes);
 
+        jLabel1.setFont(new java.awt.Font("Sylfaen", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 51));
         jLabel1.setText("LISTADO DE ORDENES POR AFILIADOS");
 
         jLabel2.setText("DNI AFILIADO");
 
         btBuscar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btBuscar.setText("Buscar");
+        btBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btBuscarActionPerformed(evt);
+            }
+        });
 
         btSalir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btSalir.setText("Salir");
@@ -84,25 +104,24 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(202, 202, 202)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(30, 30, 30)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)
-                                .addComponent(btBuscar))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(196, Short.MAX_VALUE))
+                        .addComponent(jLabel2)
+                        .addGap(30, 30, 30)
+                        .addComponent(tfDni, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(btBuscar))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(261, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btSalir)
                 .addGap(60, 60, 60))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(103, 103, 103))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,11 +131,11 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
                 .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btBuscar))
                 .addGap(59, 59, 59)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addComponent(btSalir)
                 .addGap(38, 38, 38))
         );
@@ -128,6 +147,37 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         dispose ();
     }//GEN-LAST:event_btSalirActionPerformed
+
+    private void btBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarActionPerformed
+        // TODO add your handling code here:
+        try {
+        long dniBuscar =Long.parseLong(tfDni.getText());
+        Orden ord = od.buscarOrdenXDni(dniBuscar);
+        if (ord!=null) 
+        
+        
+        }catch(Exception e){
+        JOptionPane.showMessageDialog(this, "Usted debe introducir un numero");
+        tfDni.requestFocus();
+        
+        }
+    
+    }//GEN-LAST:event_btBuscarActionPerformed
+
+    private void tbOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbOrdenesMouseClicked
+        // TODO add your handling code here:
+        int fila = tbOrdenes.getSelectedRow();
+        
+       dcFecha.setSelectedItem(()tbOrdenes.getValueAt(fila, 0));
+       
+        
+        
+        ord = new Orden ();
+        ord.setIdOrden((int)tbOrdenes.getValueAt(fila, 0));
+        ord.setNombrePrestador((String)tbOrdenes.getValueAt(fila, 1));
+        ord.setFechaTurno((Date)tbOrdenes.getValueAt(fila, 2));
+        
+    }//GEN-LAST:event_tbOrdenesMouseClicked
 private void armarCabecera () {
             ArrayList<Object> titulos=new ArrayList<Object>();
             titulos.add("ID");
@@ -147,7 +197,7 @@ private void armarCabecera () {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tbOrdenes;
+    private javax.swing.JTextField tfDni;
     // End of variables declaration//GEN-END:variables
 }

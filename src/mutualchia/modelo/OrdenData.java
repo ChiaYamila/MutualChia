@@ -187,6 +187,84 @@ public class OrdenData {
         }
     
     }
+     public Orden buscarOrdenXFecha (int id){
+    Orden orden=null;
+    
+    try {           
+            String sql = "SELECT * FROM orden WHERE idOrden =?;";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);            
+            ResultSet resultSet=ps.executeQuery();
+            
+            while(resultSet.next()){
+                orden = new Orden();
+                
+               orden.setIdOrden(resultSet.getInt("idOrden"));
+                orden.setFecha(resultSet.getDate("fecha").toLocalDate());
+                orden.setFecha(resultSet.getDate("fechaTurno").toLocalDate());
+                orden.setFormaPago(resultSet.getString("formaPago"));
+                orden.setImporte(resultSet.getFloat("importe"));
+               //Buscar Afiliado
+                int idAfiliado = resultSet.getInt("idAfiliado");
+                AfiliadoData ad = new AfiliadoData (conexion);
+                Afiliado afi=ad.buscarAfiliado(idAfiliado);
+                orden.setAfiliado(afi);
+                //Buscar Horario
+                int idHorario =resultSet.getInt("idHorario");
+                HorarioData hd = new HorarioData (conexion);
+                Horario hor=hd.buscarHorario(idHorario);
+                orden.setHorario(hor);
+                orden.setActivo(resultSet.getBoolean("activo"));
+            }      
+            ps.close();                      
+            
+            
+    
+        } catch (SQLException ex) {
+            System.out.println("Error al buscar una Orden: " + ex.getMessage());
+        }
+        
+        return orden;
+    }
+     public Orden buscarOrdenXDni (long dni){
+    Orden orden=null;
+    
+    try {           
+            String sql = "SELECT * FROM orden WHERE idOrden =?;";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setLong(1, dni);            
+            ResultSet resultSet=ps.executeQuery();
+            
+            while(resultSet.next()){
+                orden = new Orden();
+                
+               orden.setIdOrden(resultSet.getInt("idOrden"));
+                orden.setFecha(resultSet.getDate("fecha").toLocalDate());
+                orden.setFecha(resultSet.getDate("fechaTurno").toLocalDate());
+                orden.setFormaPago(resultSet.getString("formaPago"));
+                orden.setImporte(resultSet.getFloat("importe"));
+               //Buscar Afiliado
+                int idAfiliado = resultSet.getInt("idAfiliado");
+                AfiliadoData ad = new AfiliadoData (conexion);
+                Afiliado afi=ad.buscarAfiliado(idAfiliado);
+                orden.setAfiliado(afi);
+                //Buscar Horario
+                int idHorario =resultSet.getInt("idHorario");
+                HorarioData hd = new HorarioData (conexion);
+                Horario hor=hd.buscarHorario(idHorario);
+                orden.setHorario(hor);
+                orden.setActivo(resultSet.getBoolean("activo"));
+            }      
+            ps.close();                      
+            
+            
+    
+        } catch (SQLException ex) {
+            System.out.println("Error al buscar una Orden: " + ex.getMessage());
+        }
+        
+        return orden;
+    }
 
     
 }

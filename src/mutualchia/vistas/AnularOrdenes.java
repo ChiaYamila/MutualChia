@@ -7,6 +7,7 @@ package mutualchia.vistas;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mutualchia.Conexion;
@@ -21,7 +22,7 @@ public class AnularOrdenes extends javax.swing.JInternalFrame {
    private DefaultTableModel modelo;
     private Orden ord;
     private OrdenData od;
-
+ private List<Orden> listaOrdenes;
 
     /**
      * Creates new form AnularOrdenes
@@ -51,12 +52,12 @@ public class AnularOrdenes extends javax.swing.JInternalFrame {
         jButton1 = new javax.swing.JButton();
         btSalir = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        tfFecha = new javax.swing.JTextField();
         btBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbOrdenes = new javax.swing.JTable();
+        dcFecha = new com.toedter.calendar.JDateChooser();
 
-        jLabel1.setFont(new java.awt.Font("Sylfaen", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Sylfaen", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 51));
         jLabel1.setText("ANULAR ORDENES");
 
@@ -108,8 +109,8 @@ public class AnularOrdenes extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(85, 85, 85)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tfFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)
+                        .addComponent(dcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btBuscar))
                     .addGroup(layout.createSequentialGroup()
@@ -134,13 +135,14 @@ public class AnularOrdenes extends javax.swing.JInternalFrame {
                 .addGap(7, 7, 7)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(tfFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btBuscar))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(btBuscar))
+                    .addComponent(dcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(btSalir))
@@ -157,11 +159,42 @@ public class AnularOrdenes extends javax.swing.JInternalFrame {
 
     private void btBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarActionPerformed
         // TODO add your handling code here:
+        try {
+        Date fechaBuscar =Date.parseDate(dcFecha);
+        Orden ord = od.buscarOrdenXFecha(fechaBuscar);
+       
+        if (ord!=null) {
+        dcFecha.setMaxSelectableDate(fechaBuscar);
+        
+        } else {
+        JOptionPane.showMessageDialog(this, "Fecha no encontrada");
+        dcFecha.requestFocus();
+        }
+        
+        }catch(Exception e){
+        JOptionPane.showMessageDialog(this, "No hay ordenes emitidas");
+        dcFecha.requestFocus();
+        
+        }
     }//GEN-LAST:event_btBuscarActionPerformed
 
     private void tbOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbOrdenesMouseClicked
         // TODO add your handling code here:
 int fila = tbOrdenes.getSelectedRow();
+    ord = new Orden();
+            
+            //Prestador p = new Prestador();
+            ord.getFecha();
+            //hor.setPrestador(p);
+            
+            int fila=tbOrdenes.getSelectedRow();
+            Integer idHorario = (Integer) tbOrdenes.getValueAt(fila, 0);
+        Date fechaTurno = (Date) tbOrdenes.getValueAt(fila, 1);
+        String Prestador = (String) tbOrdenes.getValueAt(fila, 2);
+        String Afiliafo = (String) tbOrdenes.getValueAt(fila, 3);
+        
+        ord.setIdOrden(idOrden);
+        dcFecha.setEnabled(true);
  //Date.valueOf fecha = (String) tbOrden.getValueAt(fila, 1);
         
         //Boolean activo = (Boolean) tbOrden.getValueAt(fila, 2);
@@ -181,15 +214,43 @@ private void armarCabecera () {
             }
             tbOrdenes.setModel(modelo);
 }
+private void cargarDatosHorarios () {
+         try {
+             borrarFilasOrdenes ();
+             Orden orden =(Orden) dcFecha.getMaxSelectableDate();
+             OrdenData od = new OrdenData(new Conexion());
+             List <Orden> listaOrdenes=od.borrarOrden(orden.getIdOrden());
+             for(Orden o:listaOrdenes) {
+                 if(o.getFecha()) {
+                 
+                 
+                 
+                 modelo.addRow(new Object[]{o.getIdOrden(),o.getPrestador,o.getAfiliado(),o.getFechaTurno()});
+                 }
+                 
+             }
+         } catch (ClassNotFoundException ex) {
+             JOptionPane.showMessageDialog(this, "Error al recuperar ordenes");
+         }
+}
+ private void borrarFilasOrdenes (){
+            int a =modelo.getRowCount()-1;
+            for(int i=a;i>=0;i--){
+
+                modelo.removeRow(i );
+                
+
+        }
+        }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBuscar;
     private javax.swing.JButton btSalir;
+    private com.toedter.calendar.JDateChooser dcFecha;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbOrdenes;
-    private javax.swing.JTextField tfFecha;
     // End of variables declaration//GEN-END:variables
 }

@@ -368,9 +368,17 @@ public class OrdenVista extends javax.swing.JInternalFrame {
             ord.setFormaPago(formaPago);
             ord.setActivo(true);
             
+            
             od.agregarOrden(ord);
             ord = null;
-            
+            tfDni.setText("");
+            tfNombre.setText("");
+            tfApellido.setText("");
+            tfImporte.setText("");
+            cbPrestadores.setEditable(false);
+            cbPago.setEditable(false);
+            dcFecha.setEnabled(false);
+            cbPago.setEditable(false);
             
             
             
