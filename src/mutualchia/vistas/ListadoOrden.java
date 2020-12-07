@@ -6,6 +6,7 @@
 package mutualchia.vistas;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -87,11 +88,6 @@ public class ListadoOrden extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbOrdenes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbOrdenesMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tbOrdenes);
 
         btSalir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -153,55 +149,39 @@ public class ListadoOrden extends javax.swing.JInternalFrame {
         dispose();
     }//GEN-LAST:event_btSalirActionPerformed
 
-    private void tbOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbOrdenesMouseClicked
-        // TODO add your handling code here:
-        int fila = tbOrdenes.getSelectedRow();
-        
-       dcFecha.setSelectedItem(()tbOrdenes.getValueAt(fila, 0));
-       
-        
-        
-        ord = new Orden ();
-        ord.setIdOrden((int)tbOrdenes.getValueAt(fila, 0));
-        ord.setFechaTurno((Date)tbOrdenes.getValueAt(fila, 1));
-        ord.setPrestador((String)tbOrdenes.getValueAt(fila, 2));
-        ord.setAfiliado ((String)tbOrdenes.getValueAt(fila,3));
-        ord.setIdOrden(idOrden);
-    }//GEN-LAST:event_tbOrdenesMouseClicked
-
     private void btBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarActionPerformed
         // TODO add your handling code here:
-        try {
-        Date fechaBuscar =Date.parseDate(dcFecha);
-        Orden ord = od.buscarOrdenXFecha(fechaBuscar);
-       
-        if (ord!=null) {
-        dcFecha.setMaxSelectableDate(fechaBuscar);
-        
+        if (dcFecha.getDate()!= null) {
+      cargarDatosOrden();
         } else {
-        JOptionPane.showMessageDialog(this, "Fecha no encontrada");
+        JOptionPane.showMessageDialog(this, "Usted debe elegir una fecha" );
         dcFecha.requestFocus();
         }
+        
     }//GEN-LAST:event_btBuscarActionPerformed
-//private void cargarDatosOrden () {
-        // try {
-            // borrarFilas ();
-//             Orden orden =(Orden) dcFecha.getSelectedItem();
-               // OrdenData od = new OrdenData(new Conexion());
-//             List <Orden> listaOrdenes=od.buscarOrdenXFecha(fecha);
-//             for(Orden o:listaOrdenes) {
-  //               if(o.isActivo()) {
+
+    private void cargarDatosOrden () {
+         try {
+             borrarFilas ();
+             java.util.Date fecha =  dcFecha.getDate();
+             Long tiempo = fecha.getTime();
+             java.sql.Date ff = new java.sql.Date (tiempo);
+             LocalDate fechaTurno = ff.toLocalDate();
+             OrdenData od = new OrdenData(new Conexion());
+             List <Orden> listaOrdenes=od.BuscarOrdenxFechaEmision(fechaTurno);
+             for(Orden o:listaOrdenes) {
+                  
                  
                  
                  
-                // modelo.addRow(new Object[]{o.getIdOrden(),o.getAfiliado(), o.getFechaTurno(),o.getFechaTurno(),o.getPrestador()});
-                // }
+                 modelo.addRow(new Object[]{o.getIdOrden(),o.getFechaTurno(),o.getHorario().getPrestador(),o.getAfiliado(),});
                  
-             //}
-        // } catch (ClassNotFoundException ex) {
-             //JOptionPane.showMessageDialog(this, "Error al recuperar las ordenes");
-        // }
-                //}
+                 
+             }
+         } catch (ClassNotFoundException ex) {
+             JOptionPane.showMessageDialog(this, "Error al recuperar ordenes");
+         }
+    }
     
     
     

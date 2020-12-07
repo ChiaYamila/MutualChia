@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import mutualchia.Conexion;
@@ -118,7 +119,7 @@ public class OrdenData {
                 
                orden.setIdOrden(resultSet.getInt("idOrden"));
                 orden.setFecha(resultSet.getDate("fecha").toLocalDate());
-                orden.setFecha(resultSet.getDate("fechaTurno").toLocalDate());
+                orden.setFechaTurno(resultSet.getDate("fechaTurno").toLocalDate());
                 orden.setFormaPago(resultSet.getString("formaPago"));
                 orden.setImporte(resultSet.getFloat("importe"));
                //Buscar Afiliado
@@ -187,21 +188,21 @@ public class OrdenData {
         }
     
     }
-     public Orden buscarOrdenXFecha (int id){
-    Orden orden=null;
+     public List<Orden> BuscarOrdenxFecha(LocalDate fecha){
+        List<Orden> ordenes = new ArrayList<Orden>();
     
     try {           
-            String sql = "SELECT * FROM orden WHERE idOrden =?;";
+            String sql = "SELECT * FROM orden WHERE fechaTurno =? and activo = true;";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);            
+            ps.setDate(1, java.sql.Date.valueOf(fecha));            
             ResultSet resultSet=ps.executeQuery();
             
             while(resultSet.next()){
-                orden = new Orden();
+                Orden orden = new Orden();
                 
                orden.setIdOrden(resultSet.getInt("idOrden"));
                 orden.setFecha(resultSet.getDate("fecha").toLocalDate());
-                orden.setFecha(resultSet.getDate("fechaTurno").toLocalDate());
+                orden.setFechaTurno(resultSet.getDate("fechaTurno").toLocalDate());
                 orden.setFormaPago(resultSet.getString("formaPago"));
                 orden.setImporte(resultSet.getFloat("importe"));
                //Buscar Afiliado
@@ -215,6 +216,7 @@ public class OrdenData {
                 Horario hor=hd.buscarHorario(idHorario);
                 orden.setHorario(hor);
                 orden.setActivo(resultSet.getBoolean("activo"));
+                ordenes.add(orden);
             }      
             ps.close();                      
             
@@ -224,23 +226,23 @@ public class OrdenData {
             System.out.println("Error al buscar una Orden: " + ex.getMessage());
         }
         
-        return orden;
+        return ordenes;
     }
-     public Orden buscarOrdenXDni (long dni){
-    Orden orden=null;
+     public List<Orden> buscarOrdenXAfiliado (int idAfi){
+        List<Orden> ordenes = new ArrayList<Orden>();
     
     try {           
-            String sql = "SELECT * FROM orden WHERE idOrden =?;";
+            String sql = "SELECT * FROM orden WHERE idAfiliado =?;";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setLong(1, dni);            
+            ps.setLong(1, idAfi);            
             ResultSet resultSet=ps.executeQuery();
             
             while(resultSet.next()){
-                orden = new Orden();
+                Orden orden = new Orden();
                 
                orden.setIdOrden(resultSet.getInt("idOrden"));
                 orden.setFecha(resultSet.getDate("fecha").toLocalDate());
-                orden.setFecha(resultSet.getDate("fechaTurno").toLocalDate());
+                orden.setFechaTurno(resultSet.getDate("fechaTurno").toLocalDate());
                 orden.setFormaPago(resultSet.getString("formaPago"));
                 orden.setImporte(resultSet.getFloat("importe"));
                //Buscar Afiliado
@@ -254,6 +256,8 @@ public class OrdenData {
                 Horario hor=hd.buscarHorario(idHorario);
                 orden.setHorario(hor);
                 orden.setActivo(resultSet.getBoolean("activo"));
+                ordenes.add(orden);
+                
             }      
             ps.close();                      
             
@@ -263,7 +267,47 @@ public class OrdenData {
             System.out.println("Error al buscar una Orden: " + ex.getMessage());
         }
         
-        return orden;
+        return ordenes;
+    }
+     public List<Orden> BuscarOrdenxFechaEmision(LocalDate fecha){
+        List<Orden> ordenes = new ArrayList<Orden>();
+    
+    try {           
+            String sql = "SELECT * FROM orden WHERE fecha =? and activo = true;";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setDate(1, java.sql.Date.valueOf(fecha));            
+            ResultSet resultSet=ps.executeQuery();
+            
+            while(resultSet.next()){
+                Orden orden = new Orden();
+                
+               orden.setIdOrden(resultSet.getInt("idOrden"));
+                orden.setFecha(resultSet.getDate("fecha").toLocalDate());
+                orden.setFechaTurno(resultSet.getDate("fechaTurno").toLocalDate());
+                orden.setFormaPago(resultSet.getString("formaPago"));
+                orden.setImporte(resultSet.getFloat("importe"));
+               //Buscar Afiliado
+                int idAfiliado = resultSet.getInt("idAfiliado");
+                AfiliadoData ad = new AfiliadoData (conexion);
+                Afiliado afi=ad.buscarAfiliado(idAfiliado);
+                orden.setAfiliado(afi);
+                //Buscar Horario
+                int idHorario =resultSet.getInt("idHorario");
+                HorarioData hd = new HorarioData (conexion);
+                Horario hor=hd.buscarHorario(idHorario);
+                orden.setHorario(hor);
+                orden.setActivo(resultSet.getBoolean("activo"));
+                ordenes.add(orden);
+            }      
+            ps.close();                      
+            
+            
+    
+        } catch (SQLException ex) {
+            System.out.println("Error al buscar una Orden: " + ex.getMessage());
+        }
+        
+        return ordenes;
     }
 
     

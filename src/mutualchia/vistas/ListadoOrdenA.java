@@ -5,7 +5,9 @@
  */
 package mutualchia.vistas;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mutualchia.Conexion;
@@ -30,6 +32,7 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
      */
     public ListadoOrdenA() {
          try {
+             initComponents();
         modelo= new DefaultTableModel ();
         armarCabecera();
         ad = new AfiliadoData (new Conexion());
@@ -70,11 +73,6 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbOrdenes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbOrdenesMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tbOrdenes);
 
         jLabel1.setFont(new java.awt.Font("Sylfaen", 1, 24)); // NOI18N
@@ -152,9 +150,14 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         try {
         long dniBuscar =Long.parseLong(tfDni.getText());
-        Orden ord = od.buscarOrdenXDni(dniBuscar);
-        if (ord!=null) 
+        Afiliado afi = ad.buscarAfiliadoXDni(dniBuscar);
+        if (afi!=null) {
+            cargarDatosOrden(afi.getIdAfiliado());
         
+        } else {
+        JOptionPane.showMessageDialog(this, "Afiliado no encontrado");
+        tfDni.requestFocus();
+        }
         
         }catch(Exception e){
         JOptionPane.showMessageDialog(this, "Usted debe introducir un numero");
@@ -163,21 +166,6 @@ public class ListadoOrdenA extends javax.swing.JInternalFrame {
         }
     
     }//GEN-LAST:event_btBuscarActionPerformed
-
-    private void tbOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbOrdenesMouseClicked
-        // TODO add your handling code here:
-        int fila = tbOrdenes.getSelectedRow();
-        
-       dcFecha.setSelectedItem(()tbOrdenes.getValueAt(fila, 0));
-       
-        
-        
-        ord = new Orden ();
-        ord.setIdOrden((int)tbOrdenes.getValueAt(fila, 0));
-        ord.setNombrePrestador((String)tbOrdenes.getValueAt(fila, 1));
-        ord.setFechaTurno((Date)tbOrdenes.getValueAt(fila, 2));
-        
-    }//GEN-LAST:event_tbOrdenesMouseClicked
 private void armarCabecera () {
             ArrayList<Object> titulos=new ArrayList<Object>();
             titulos.add("ID");
@@ -190,6 +178,34 @@ private void armarCabecera () {
             }
             tbOrdenes.setModel(modelo);
 }
+private void cargarDatosOrden (int idAfiliado) {
+         try {
+             borrarFilasOrdenes ();
+             
+             OrdenData od = new OrdenData(new Conexion());
+             List <Orden> listaOrdenes=od.buscarOrdenXAfiliado(idAfiliado);
+             for(Orden o:listaOrdenes) {
+                  
+                 
+                 
+                 
+                 modelo.addRow(new Object[]{o.getIdOrden(),o.getFechaTurno(),o.getHorario().getPrestador()});
+                 
+                 
+             }
+         } catch (ClassNotFoundException ex) {
+             JOptionPane.showMessageDialog(this, "Error al recuperar ordenes");
+         }
+}
+ private void borrarFilasOrdenes (){
+            int a =modelo.getRowCount()-1;
+            for(int i=a;i>=0;i--){
+
+                modelo.removeRow(i );
+                
+
+        }
+        }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBuscar;
