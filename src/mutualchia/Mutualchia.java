@@ -179,6 +179,7 @@ public class Mutualchia {
             // TODO code application logic here
    } catch (ClassNotFoundException ex) {
             System.out.println("ERROR AL CARGAR DRIVER");
+            System.out.println("AGREGUE UN NUEVO ERROR AL CARGAR DRIVER");
         
         }
     }
